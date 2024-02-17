@@ -18,7 +18,7 @@ fun Application.configureRouting() {
     install(DoubleReceive)
     routing {
         get("/") {
-            call.respondText("Hello World!")
+            call.respondText("Hello BoisssTacf!")
         }
         // Static plugin. Try to access `/static/index.html`
         static("/static") {
