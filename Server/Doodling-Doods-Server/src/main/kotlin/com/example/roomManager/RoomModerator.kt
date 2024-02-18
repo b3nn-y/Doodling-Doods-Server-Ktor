@@ -10,7 +10,7 @@ class RoomModerator {
     //adds a room to the room list
     fun addRoom(name: String, room: Room) {
         rooms[name] = room
-        println(rooms)
+//        println(rooms)
         println("Room Added")
         val job = createBackgroundJob(name)
         roomJobs[name] = job
@@ -24,8 +24,6 @@ class RoomModerator {
                 try {
                     while (rooms[name]?.players?.size!! > 0){
                         println("$name is running with ${rooms[name]?.players!!.size} players")
-                        println(rooms)
-                        println(roomJobs)
                         delay(10000)
                     }
                     for (i in 1..10){
@@ -76,7 +74,7 @@ class RoomModerator {
 
     //this function adds a player to a room based on name
     fun addPlayerToRoom(name: String){
-        rooms[name]?.players?.add(Player(name))
+        rooms[name]?.players?.add(Player(name, "", ""))
     }
 
 }

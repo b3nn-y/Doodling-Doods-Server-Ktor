@@ -6,8 +6,11 @@ import java.util.concurrent.ConcurrentHashMap
 class PlayerCommunicationManager {
     private val playerSockets = ConcurrentHashMap<String, WebSocketSession>()
 
-    fun connectPlayer(action: String){
-        
+    fun connectPlayer(player: Player, action: String): String? {
+        println(player)
+        println(action)
+        return player.name
     }
 
 }
+
