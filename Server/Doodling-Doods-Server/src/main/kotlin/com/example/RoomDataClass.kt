@@ -1,8 +1,9 @@
 package com.example
 
-import com.example.GameTables.autoIncrement
+import kotlinx.serialization.Serializable
 
-data class GameDataClass (
+@Serializable
+data class RoomDataClass (
     val id : Int,
     val room_id:String,
     val created_by :String,

@@ -1,4 +1,7 @@
 package com.example.db
 
-class CreatRoomDataClass {
-}
+data class CreateRoomDataClass(
+    val room_id:String,
+    val created_by:String,
+    val password:String
+)

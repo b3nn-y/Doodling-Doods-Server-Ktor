@@ -1,12 +1,14 @@
-package com.example.db
+package com.example
 
 
+import com.example.demo.Players
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
@@ -14,9 +16,9 @@ object DatabaseFactory {
         Database.connect(hikari())
 
         transaction {
-            SchemaUtils.create(GameTables)
-             val result = exec("select 1")
-            println("result $result")
+            SchemaUtils.create(Players)
+//             val result = exec("select 1")
+//            println("result $result")
         }
     }
 
@@ -31,10 +33,7 @@ object DatabaseFactory {
         return HikariDataSource(config)
     }
 
-    suspend fun <T> dbQuery(block:() ->T):T = withContext(Dispatchers.IO){
-        transaction {
-            block()
-        }
-    }
+    suspend fun <T> dbQuery(block: suspend () -> T): T =
+        newSuspendedTransaction(Dispatchers.IO) { block() }
 
 }
