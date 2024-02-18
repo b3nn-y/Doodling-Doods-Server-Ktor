@@ -18,7 +18,7 @@ fun Application.configureRouting() {
     install(DoubleReceive)
     routing {
         get("/") {
-            call.respondText("Hello Boisss lets start\n websocketssss!")
+            call.respondText("Hello welcome to Doodling Doods!!")
         }
         // Static plugin. Try to access `/static/index.html`
         static("/static") {

@@ -1,15 +1,13 @@
 import com.example.playerManager.Player
-import com.example.roomManager.CreateRoom
 import com.example.roomManager.Room
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlin.random.Random
 
 class RoomModerator {
     private var rooms = hashMapOf<String, Room>()
     private val roomJobs = mutableMapOf<String, Job>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+
+    //adds a room to the room list
     fun addRoom(name: String, room: Room) {
         rooms[name] = room
         println(rooms)
@@ -19,6 +17,7 @@ class RoomModerator {
 
     }
 
+    //THis creates a background loop to track the room, for active players
     private fun createBackgroundJob(name: String): Job {
         return coroutineScope.launch {
             while (isActive) {
@@ -47,6 +46,8 @@ class RoomModerator {
             }
         }
     }
+
+    //this sends out info about a room based on its name
     fun getRoom(name: String): Room? {
         return try {
             rooms[name]
@@ -55,10 +56,12 @@ class RoomModerator {
         }
     }
 
+    //this function gives all the hashmap of all active rooms
     fun getAllRooms(): HashMap<String, Room> {
         return rooms
     }
 
+    //this function removes the room from the list and cancels the background check
     fun deleteRoom(name: String) {
         try {
             println("Room $name is getting destroyed")
@@ -70,6 +73,8 @@ class RoomModerator {
             println("No Room present")
         }
     }
+
+    //this function adds a player to a room based on name
     fun addPlayerToRoom(name: String){
         rooms[name]?.players?.add(Player(name))
     }
