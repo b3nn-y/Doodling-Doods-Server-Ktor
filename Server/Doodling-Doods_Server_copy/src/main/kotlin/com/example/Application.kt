@@ -13,22 +13,23 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
+import kotlinx.serialization.Serializable
 
 
 import java.net.ServerSocket
 
 
 fun main() {
-    val port =8081
-    var serverSocket:ServerSocket?=null
+    val port = 8081
+    var serverSocket: ServerSocket? = null
     try {
-        serverSocket =ServerSocket(port)
+        serverSocket = ServerSocket(port)
         DatabaseFactory.init()
         embeddedServer(Netty, port = 8081, host = "127.0.0.1", module = Application::module)
             .start(wait = true)
-    }catch (e:Exception){
+    } catch (e: Exception) {
         println(e)
-    }finally {
+    } finally {
         serverSocket?.close()
     }
 
@@ -47,7 +48,7 @@ fun Application.module() {
     DatabaseFactory.init()
 
     routing {
-        post("/addRooms"){
+        post("/addRooms") {
             val fromParameters = call.receiveParameters()
             val roomId = fromParameters.getOrFail("room_id")
             val createdBy = fromParameters.getOrFail("created_by")
@@ -59,13 +60,23 @@ fun Application.module() {
 
         }
 
-        get("/rooms"){
+        get("/rooms") {
             val listOfRooms = dao.allRooms()
 
-            if (listOfRooms.isEmpty()){
+            if (listOfRooms.isEmpty()) {
                 call.respond("empty database")
-            }else{
-                call.respond(listOfRooms.toString())
+            } else {
+
+                val listOfJsonRooms = listOfRooms.map { room ->
+                    JsonRoomObject(
+                        room.id,
+                        room.room_id,
+                        room.created_by,
+                        room.password
+                    )
+                }
+
+                call.respond(listOfJsonRooms)
             }
         }
 
@@ -73,13 +84,21 @@ fun Application.module() {
     }
 
 
-
 }
+
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         json()
     }
 }
+
+@Serializable
+data class JsonRoomObject(
+    val id: Int,
+    val room_id: String,
+    val created_by: String,
+    val password: String
+)
 
 
 
