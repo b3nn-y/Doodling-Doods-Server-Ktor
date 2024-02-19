@@ -26,7 +26,7 @@ class RoomModerator {
                         println("$name is running with ${rooms[name]?.players!!.size} players")
                         delay(10000)
                     }
-                    for (i in 1..10){
+                    for (i in 1..120){
                         if (rooms[name]?.players!!.size == 0){
                             println("The room $name has no players and is waiting for players to join in $i/120 seconds, If not the room will be closed")
                             delay(1000)

@@ -10,6 +10,8 @@ class PlayerSocketRoutes {
 fun Route.socket(communicationManager: PlayerCommunicationManager){
     route("/create"){
         webSocket {
+            send("Hello")
+            println("Hellow")
             val details = receiveDetails()
             val player = communicationManager.connectPlayer(details, "create")
             if (player == null){
@@ -21,11 +23,11 @@ fun Route.socket(communicationManager: PlayerCommunicationManager){
 
     route("/join"){
         webSocket {
-            val details = receiveDetails()
-            val player = communicationManager.connectPlayer(details, "join")
-            if (player == null){
-                close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "wrong info"))
-            }
+//            val details = receiveDetails()
+//            val player = communicationManager.connectPlayer(details, "join")
+//            if (player == null){
+//                close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "wrong info"))
+//            }
 
         }
     }
