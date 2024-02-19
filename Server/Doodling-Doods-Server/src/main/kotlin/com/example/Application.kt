@@ -20,6 +20,7 @@ import java.net.ServerSocket
 
 
 fun main() {
+<<<<<<< Updated upstream
     val port =8081
     var serverSocket:ServerSocket?=null
     try {
@@ -38,6 +39,21 @@ fun main() {
 
 
 
+=======
+//    val roomCreator = RoomModerator()
+//    roomCreator.addRoom("TestRoom1", Room("","", arrayListOf(Player("","","")),false))
+//    roomCreator.addRoom("TestRoom2", Room("","", arrayListOf(Player("","","")),false))
+//    roomCreator.addRoom("TestRoom3", Room("","", arrayListOf(Player("","","")),false))
+//    roomCreator.addRoom("TestRoom4", Room("","", arrayListOf(Player("","","")),false))
+//    roomCreator.addRoom("TestRoom5", Room("","", ArrayList(),false))
+//    CoroutineScope(Job()).launch {
+//        delay(4000)
+//        roomCreator.addRoom("TestRoom6", Room("","", arrayListOf(Player("","","")),false))
+//        roomCreator.addPlayerToRoom("TestRoom5")
+//    }
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
+        .start(wait = true)
+>>>>>>> Stashed changes
 
 
 }

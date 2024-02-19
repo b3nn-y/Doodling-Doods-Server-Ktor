@@ -1,0 +1,28 @@
+n22:16:33,702 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.4.14
+‡22:16:33,703 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - No custom configurators were discovered as a service.
+£22:16:33,703 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+±22:16:33,703 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+s22:16:33,706 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+n22:16:33,707 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+Õ22:16:33,710 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 4 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+Ÿ22:16:33,710 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+­22:16:33,711 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+r22:16:33,711 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+ë22:16:33,713 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/benny-zstch1344/Trade%20Show/Doodling-Doods-Server-Ktor/Server/Doodling-Doods-Server/build/resources/main/logback.xml]
+•22:16:33,713 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@63dd899 - Resource [logback.xml] occurs multiple times on the classpath.
+û22:16:33,713 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@63dd899 - Resource [logback.xml] occurs at [file:/Users/benny-zstch1344/Trade%20Show/Doodling-Doods-Server-Ktor/Server/Doodling-Doods-Server/build/resources/main/logback.xml]
+Ð22:16:33,713 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@63dd899 - Resource [logback.xml] occurs at [jar:file:/Users/benny-zstch1344/.gradle/caches/modules-2/files-2.1/io.swagger.codegen.v3/swagger-codegen-generators/1.0.38/24ad4592fa92f0e693d616de13629f59e5c3cd97/swagger-codegen-generators-1.0.38.jar!/logback.xml]
+u22:16:33,760 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+ž22:16:33,760 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+µ22:16:33,763 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+}22:16:33,775 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to TRACE
+‡22:16:33,775 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+‡22:16:33,775 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.eclipse.jetty] to INFO
+~22:16:33,775 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [io.netty] to INFO
+m22:16:33,775 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59d2400d - End of configuration.
+Š22:16:33,776 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@75cd8043 - Registering current configuration as safe fallback point
+Ù22:16:33,776 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 65 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+‡2024-02-18 22:16:33.808 [Test worker @coroutine#1] TRACE i.ktor.client.plugins.HttpPlainText - Adding Accept-Charset=UTF-8 to http:///
+¤2024-02-18 22:16:33.829 [DefaultDispatcher-worker-1 @call-context#2] INFO  ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+€2024-02-18 22:16:33.867 [Test worker @coroutine#1] TRACE i.k.client.plugins.HttpCallValidator - Processing exception io.ktor.server.application.MissingApplicationPluginException: Application plugin WebSockets is not installed for request http://localhost/
