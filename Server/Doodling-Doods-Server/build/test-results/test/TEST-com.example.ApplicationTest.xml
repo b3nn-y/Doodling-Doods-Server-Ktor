@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.ApplicationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2024-02-18T16:46:33" hostname="benny-zstch1344" time="0.24">
+  <properties/>
+  <testcase name="testRoot" classname="com.example.ApplicationTest" time="0.24">
+    <failure message="io.ktor.server.application.MissingApplicationPluginException: Application plugin WebSockets is not installed" type="io.ktor.server.application.MissingApplicationPluginException">io.ktor.server.application.MissingApplicationPluginException: Application plugin WebSockets is not installed
+	at app//io.ktor.server.application.ApplicationPluginKt.plugin(ApplicationPlugin.kt:75)
+	at app//io.ktor.server.websocket.RoutingKt.webSocketRaw(Routing.kt:99)
+	at app//io.ktor.server.websocket.RoutingKt.webSocket(Routing.kt:153)
+	at app//io.ktor.server.websocket.RoutingKt.webSocket$default(Routing.kt:152)
+	at app//com.example.playerManager.PlayerSocketRoutesKt$socket$1.invoke(PlayerSocketRoutes.kt:12)
+	at app//com.example.playerManager.PlayerSocketRoutesKt$socket$1.invoke(PlayerSocketRoutes.kt:11)
+	at app//io.ktor.server.routing.RoutingBuilderKt.route(RoutingBuilder.kt:21)
+	at app//com.example.playerManager.PlayerSocketRoutesKt.socket(PlayerSocketRoutes.kt:11)
+	at app//com.example.plugins.RoutingKt$configureRouting$2.invoke(Routing.kt:22)
+	at app//com.example.plugins.RoutingKt$configureRouting$2.invoke(Routing.kt:21)
+	at app//io.ktor.server.routing.Routing$Plugin.install(Routing.kt:139)
+	at app//io.ktor.server.routing.Routing$Plugin.install(Routing.kt:123)
+	at app//io.ktor.server.application.ApplicationPluginKt.install(ApplicationPlugin.kt:100)
+	at app//io.ktor.server.routing.RoutingKt.routing(Routing.kt:163)
+	at app//com.example.plugins.RoutingKt.configureRouting(Routing.kt:21)
+	at app//com.example.ApplicationTest$testRoot$1$1.invoke(ApplicationTest.kt:15)
+	at app//com.example.ApplicationTest$testRoot$1$1.invoke(ApplicationTest.kt:14)
+	at app//io.ktor.server.engine.internal.CallableUtilsKt.executeModuleFunction(CallableUtils.kt:51)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$launchModuleByName$1.invoke(ApplicationEngineEnvironmentReloading.kt:332)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$launchModuleByName$1.invoke(ApplicationEngineEnvironmentReloading.kt:331)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.avoidingDoubleStartupFor(ApplicationEngineEnvironmentReloading.kt:356)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.launchModuleByName(ApplicationEngineEnvironmentReloading.kt:331)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.access$launchModuleByName(ApplicationEngineEnvironmentReloading.kt:32)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$instantiateAndConfigureApplication$1.invoke(ApplicationEngineEnvironmentReloading.kt:319)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$instantiateAndConfigureApplication$1.invoke(ApplicationEngineEnvironmentReloading.kt:310)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.avoidingDoubleStartup(ApplicationEngineEnvironmentReloading.kt:338)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.instantiateAndConfigureApplication(ApplicationEngineEnvironmentReloading.kt:310)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.createApplication(ApplicationEngineEnvironmentReloading.kt:150)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.start(ApplicationEngineEnvironmentReloading.kt:277)
+	at app//io.ktor.server.testing.TestApplicationEngine.start(TestApplicationEngine.kt:144)
+	at app//io.ktor.server.engine.ApplicationEngine$DefaultImpls.start$default(ApplicationEngine.kt:78)
+	at app//io.ktor.server.testing.client.TestHttpClientEngine.execute(TestHttpClientEngine.kt:44)
+	at app//io.ktor.server.testing.client.DelegatingTestClientEngine.execute(DelegatingTestClientEngine.kt:53)
+	at app//io.ktor.client.engine.HttpClientEngine$executeWithinCallContext$2.invokeSuspend(HttpClientEngine.kt:99)
+	at _COROUTINE._BOUNDARY._(CoroutineDebugging.kt:46)
+	at io.ktor.client.engine.HttpClientEngine$DefaultImpls.executeWithinCallContext(HttpClientEngine.kt:100)
+	at io.ktor.client.engine.HttpClientEngine$install$1.invokeSuspend(HttpClientEngine.kt:70)
+	at io.ktor.client.plugins.HttpSend$DefaultSender.execute(HttpSend.kt:138)
+	at io.ktor.client.plugins.HttpRedirect$Plugin$install$1.invokeSuspend(HttpRedirect.kt:64)
+	at io.ktor.client.plugins.HttpCallValidator$Companion$install$3.invokeSuspend(HttpCallValidator.kt:151)
+	at io.ktor.client.plugins.HttpSend$Plugin$install$1.invokeSuspend(HttpSend.kt:104)
+	at io.ktor.client.plugins.HttpCallValidator$Companion$install$1.invokeSuspend(HttpCallValidator.kt:130)
+	at io.ktor.client.plugins.HttpRequestLifecycle$Plugin$install$1.invokeSuspend(HttpRequestLifecycle.kt:38)
+	at io.ktor.client.HttpClient.execute$ktor_client_core(HttpClient.kt:191)
+	at io.ktor.client.statement.HttpStatement.executeUnsafe(HttpStatement.kt:108)
+	at io.ktor.client.statement.HttpStatement.execute(HttpStatement.kt:47)
+	at com.example.ApplicationTest$testRoot$1.invokeSuspend(ApplicationTest.kt:32)
+	at io.ktor.server.testing.TestApplicationKt$testApplication$builder$1$1.invokeSuspend(TestApplication.kt:335)
+Caused by: io.ktor.server.application.MissingApplicationPluginException: Application plugin WebSockets is not installed
+	at app//io.ktor.server.application.ApplicationPluginKt.plugin(ApplicationPlugin.kt:75)
+	at app//io.ktor.server.websocket.RoutingKt.webSocketRaw(Routing.kt:99)
+	at app//io.ktor.server.websocket.RoutingKt.webSocket(Routing.kt:153)
+	at app//io.ktor.server.websocket.RoutingKt.webSocket$default(Routing.kt:152)
+	at app//com.example.playerManager.PlayerSocketRoutesKt$socket$1.invoke(PlayerSocketRoutes.kt:12)
+	at app//com.example.playerManager.PlayerSocketRoutesKt$socket$1.invoke(PlayerSocketRoutes.kt:11)
+	at app//io.ktor.server.routing.RoutingBuilderKt.route(RoutingBuilder.kt:21)
+	at app//com.example.playerManager.PlayerSocketRoutesKt.socket(PlayerSocketRoutes.kt:11)
+	at app//com.example.plugins.RoutingKt$configureRouting$2.invoke(Routing.kt:22)
+	at app//com.example.plugins.RoutingKt$configureRouting$2.invoke(Routing.kt:21)
+	at app//io.ktor.server.routing.Routing$Plugin.install(Routing.kt:139)
+	at app//io.ktor.server.routing.Routing$Plugin.install(Routing.kt:123)
+	at app//io.ktor.server.application.ApplicationPluginKt.install(ApplicationPlugin.kt:100)
+	at app//io.ktor.server.routing.RoutingKt.routing(Routing.kt:163)
+	at app//com.example.plugins.RoutingKt.configureRouting(Routing.kt:21)
+	at app//com.example.ApplicationTest$testRoot$1$1.invoke(ApplicationTest.kt:15)
+	at app//com.example.ApplicationTest$testRoot$1$1.invoke(ApplicationTest.kt:14)
+	at app//io.ktor.server.engine.internal.CallableUtilsKt.executeModuleFunction(CallableUtils.kt:51)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$launchModuleByName$1.invoke(ApplicationEngineEnvironmentReloading.kt:332)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$launchModuleByName$1.invoke(ApplicationEngineEnvironmentReloading.kt:331)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.avoidingDoubleStartupFor(ApplicationEngineEnvironmentReloading.kt:356)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.launchModuleByName(ApplicationEngineEnvironmentReloading.kt:331)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.access$launchModuleByName(ApplicationEngineEnvironmentReloading.kt:32)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$instantiateAndConfigureApplication$1.invoke(ApplicationEngineEnvironmentReloading.kt:319)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading$instantiateAndConfigureApplication$1.invoke(ApplicationEngineEnvironmentReloading.kt:310)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.avoidingDoubleStartup(ApplicationEngineEnvironmentReloading.kt:338)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.instantiateAndConfigureApplication(ApplicationEngineEnvironmentReloading.kt:310)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.createApplication(ApplicationEngineEnvironmentReloading.kt:150)
+	at app//io.ktor.server.engine.ApplicationEngineEnvironmentReloading.start(ApplicationEngineEnvironmentReloading.kt:277)
+	at app//io.ktor.server.testing.TestApplicationEngine.start(TestApplicationEngine.kt:144)
+	at app//io.ktor.server.engine.ApplicationEngine$DefaultImpls.start$default(ApplicationEngine.kt:78)
+	at app//io.ktor.server.testing.client.TestHttpClientEngine.execute(TestHttpClientEngine.kt:44)
+	at app//io.ktor.server.testing.client.DelegatingTestClientEngine.execute(DelegatingTestClientEngine.kt:53)
+	at app//io.ktor.client.engine.HttpClientEngine$executeWithinCallContext$2.invokeSuspend(HttpClientEngine.kt:99)
+	at app//kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at app//kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+	at app//kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:115)
+	at app//kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:100)
+	at app//kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:584)
+	at app//kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:793)
+	at app//kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:697)
+	at app//kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:684)
+</failure>
+  </testcase>
+  <system-out><![CDATA[22:16:33,702 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.4.14
+22:16:33,703 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - No custom configurators were discovered as a service.
+22:16:33,703 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+22:16:33,703 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+22:16:33,706 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+22:16:33,707 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+22:16:33,710 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 4 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+22:16:33,710 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+22:16:33,711 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+22:16:33,711 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+22:16:33,713 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/benny-zstch1344/Trade%20Show/Doodling-Doods-Server-Ktor/Server/Doodling-Doods-Server/build/resources/main/logback.xml]
+22:16:33,713 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@63dd899 - Resource [logback.xml] occurs multiple times on the classpath.
+22:16:33,713 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@63dd899 - Resource [logback.xml] occurs at [file:/Users/benny-zstch1344/Trade%20Show/Doodling-Doods-Server-Ktor/Server/Doodling-Doods-Server/build/resources/main/logback.xml]
+22:16:33,713 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@63dd899 - Resource [logback.xml] occurs at [jar:file:/Users/benny-zstch1344/.gradle/caches/modules-2/files-2.1/io.swagger.codegen.v3/swagger-codegen-generators/1.0.38/24ad4592fa92f0e693d616de13629f59e5c3cd97/swagger-codegen-generators-1.0.38.jar!/logback.xml]
+22:16:33,760 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+22:16:33,760 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+22:16:33,763 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+22:16:33,775 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to TRACE
+22:16:33,775 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+22:16:33,775 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.eclipse.jetty] to INFO
+22:16:33,775 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [io.netty] to INFO
+22:16:33,775 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59d2400d - End of configuration.
+22:16:33,776 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@75cd8043 - Registering current configuration as safe fallback point
+22:16:33,776 |-INFO in ch.qos.logback.classic.util.ContextInitializer@663411de - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 65 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2024-02-18 22:16:33.808 [Test worker @coroutine#1] TRACE i.ktor.client.plugins.HttpPlainText - Adding Accept-Charset=UTF-8 to http:///
+2024-02-18 22:16:33.829 [DefaultDispatcher-worker-1 @call-context#2] INFO  ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+2024-02-18 22:16:33.867 [Test worker @coroutine#1] TRACE i.k.client.plugins.HttpCallValidator - Processing exception io.ktor.server.application.MissingApplicationPluginException: Application plugin WebSockets is not installed for request http://localhost/
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
