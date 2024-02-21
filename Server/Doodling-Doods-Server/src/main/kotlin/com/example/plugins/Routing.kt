@@ -4,13 +4,12 @@ import com.example.DatabaseFactory
 import com.example.dao.RoomImpl
 import com.example.dao.RoomsDao
 import com.example.models.JsonRoomObject
-import com.example.playerManager.PlayerCommunicationManager
+//import com.example.playerManager.PlayerCommunicationManager
+import com.example.playerManager.TicTacToeGame
 import com.example.playerManager.socket
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
-import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.doublereceive.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
@@ -20,7 +19,7 @@ import io.ktor.server.util.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 
-fun Application.configureRouting(communicationManager: PlayerCommunicationManager) {
+fun Application.configureRouting(communicationManager: TicTacToeGame) {
     install(StatusPages) {
         exception<Throwable> { call, cause ->
             call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
@@ -43,16 +42,7 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
     }
     routing {
         get("/") {
-            call.respondText("Hello World!")
-        }
-        // Static plugin. Try to access `/static/index.html`
-        static("/static") {
-            resources("static")
-        }
-        post("/double-receive") {
-            val first = call.receiveText()
-            val theSame = call.receiveText()
-            call.respondText(first + " " + theSame)
+            call.respondText("Hello, Welcome to the Doodling Doods Server!!")
         }
     }
 
@@ -95,4 +85,5 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
 
     }
+
 }
