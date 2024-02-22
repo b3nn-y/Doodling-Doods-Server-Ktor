@@ -23,16 +23,19 @@ fun Route.socket(communicationManager: PlayerCommunicationManager){
                     if(frame is Frame.Text) {
                         val incomingMessage = (frame.readText())
                         if (!isPlayerSuccessfullyConnected){
-                            val playerDetails = communicationManager.assignTheirUserName(incomingMessage, player)
-                            player = playerDetails.name
-                            room = playerDetails.roomName
-                            isPlayerSuccessfullyConnected = true
+                            if (communicationManager.checkIfTheInputIsOfPlayerDataType(incomingMessage)){
+                                val playerDetails = communicationManager.assignTheirUserName(incomingMessage, player)
+                                player = playerDetails.name
+                                room = playerDetails.roomName
+                                isPlayerSuccessfullyConnected = true
+                            }
+
                         }
                         else{
                             communicationManager.incomingClientRequestModerator(player, room, incomingMessage)
                         }
                         println("\n\n\n")
-                        println(incomingMessage)
+                        println("$player: $incomingMessage")
                         println("\n\n\n")
 
                     }

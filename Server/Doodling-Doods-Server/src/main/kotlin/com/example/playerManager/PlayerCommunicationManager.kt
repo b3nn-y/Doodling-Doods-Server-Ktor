@@ -40,7 +40,7 @@ class PlayerCommunicationManager {
     }
 
     fun incomingClientRequestModerator(player: String, room: String, request: String){
-        
+
     }
 
     fun connectPlayer(session: WebSocketSession): String {
@@ -72,6 +72,17 @@ class PlayerCommunicationManager {
     suspend fun sendMessageToAllClients(message: String) {
         playerSockets.values.forEach { socket ->
             socket.send(message)
+        }
+    }
+
+    fun checkIfTheInputIsOfPlayerDataType(data: String): Boolean {
+        try {
+            Gson().fromJson(data, Player::class.java)
+            return true
+        }
+        catch (e:Exception){
+            println("\n\n\nPlayer Details InCorrect, Waiting for correct details")
+            return false
         }
     }
 }
