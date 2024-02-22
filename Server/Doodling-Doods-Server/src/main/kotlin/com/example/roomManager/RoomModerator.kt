@@ -73,9 +73,9 @@ class RoomModerator {
     }
 
     //this function adds a player to a room based on name
-    fun addPlayerToRoom(name: String){
-        rooms[name]?.players?.add(Player(name, "", ""))
-    }
+//    fun addPlayerToRoom(name: String){
+//        rooms[name]?.players?.add(Player(name, "", ""))
+//    }
 
 }
 

@@ -1,18 +1,18 @@
 package com.example.playerManager
 
-import com.google.gson.Gson
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.serialization.json.Json
 
 class PlayerSocketRoutes {
 }
-fun Route.socket(communicationManager: TicTacToeGame){
+fun Route.socket(communicationManager: PlayerCommunicationManager){
     route("/connect"){
         webSocket {
-            val player = communicationManager.connectPlayer(this, "")
+            var isPlayerSuccessfullyConnected = false
+            var player = communicationManager.connectPlayer(this)
+            var room = ""
             if(player == null) {
                 close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Invalid"))
                 return@webSocket
@@ -21,11 +21,20 @@ fun Route.socket(communicationManager: TicTacToeGame){
             try {
                 incoming.consumeEach { frame ->
                     if(frame is Frame.Text) {
-                        val action = (frame.readText())
+                        val incomingMessage = (frame.readText())
+                        if (!isPlayerSuccessfullyConnected){
+                            val playerDetails = communicationManager.assignTheirUserName(incomingMessage, player)
+                            player = playerDetails.name
+                            room = playerDetails.roomName
+                            isPlayerSuccessfullyConnected = true
+                        }
+                        else{
+                            communicationManager.incomingClientRequestModerator(player, room, incomingMessage)
+                        }
                         println("\n\n\n")
-                        println(action)
+                        println(incomingMessage)
                         println("\n\n\n")
-                        send(Gson().toJson(Message("Hello")))
+
                     }
                 }
             } catch(e: Exception) {
@@ -34,22 +43,8 @@ fun Route.socket(communicationManager: TicTacToeGame){
                 communicationManager.disconnectPlayer(player)
             }
         }
-        }
     }
-
-//    route("/join"){
-//        webSocket {
-////            val details = receiveDetails()
-////            val player = communicationManager.connectPlayer(details, "join")
-////            if (player == null){
-////                close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "wrong info"))
-////            }
-//
-//        }
-//    }
+}
 
 
 
-data class Message(
-    val data: String
-)

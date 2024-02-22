@@ -1,16 +1,9 @@
 package com.example
-import RoomModerator
-import com.example.playerManager.Player
 
-import com.example.playerManager.TicTacToeGame
+import com.example.playerManager.PlayerCommunicationManager
 import com.example.plugins.*
-import com.example.roomManager.Room
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.coroutines.*
-import java.net.ServerSocket
-import java.util.ArrayList
 
 fun main(args: Array<String>) {
 //    val roomCreator = RoomModerator()
@@ -35,7 +28,7 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    val communicationManager = TicTacToeGame()
+    val communicationManager = PlayerCommunicationManager()
     configureSockets()
     configureSerialization()
     configureDatabases()

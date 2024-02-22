@@ -4,8 +4,7 @@ import com.example.DatabaseFactory
 import com.example.dao.RoomImpl
 import com.example.dao.RoomsDao
 import com.example.models.JsonRoomObject
-//import com.example.playerManager.PlayerCommunicationManager
-import com.example.playerManager.TicTacToeGame
+import com.example.playerManager.PlayerCommunicationManager
 import com.example.playerManager.socket
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -19,7 +18,7 @@ import io.ktor.server.util.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 
-fun Application.configureRouting(communicationManager: TicTacToeGame) {
+fun Application.configureRouting(communicationManager: PlayerCommunicationManager) {
     install(StatusPages) {
         exception<Throwable> { call, cause ->
             call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)

@@ -14,5 +14,6 @@ data class Room(
     var cords: String,
     var visibility: Boolean,
     var currentPlayer: Player,
-    var rounds: Int = 3
+    var rounds: Int = 3,
+    var currentWordToGuess:String
 )
