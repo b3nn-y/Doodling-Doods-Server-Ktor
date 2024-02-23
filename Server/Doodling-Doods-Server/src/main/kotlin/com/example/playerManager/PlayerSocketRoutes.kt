@@ -13,6 +13,7 @@ fun Route.socket(communicationManager: PlayerCommunicationManager){
             var isPlayerSuccessfullyConnected = false
             var player = communicationManager.connectPlayer(this)
             var room = ""
+            var details: Player? = null
             if(player == null) {
                 close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Invalid"))
                 return@webSocket
@@ -24,9 +25,11 @@ fun Route.socket(communicationManager: PlayerCommunicationManager){
                         val incomingMessage = (frame.readText())
                         if (!isPlayerSuccessfullyConnected){
                             if (communicationManager.checkIfTheInputIsOfPlayerDataType(incomingMessage)){
-                                val playerDetails = communicationManager.assignTheirUserName(incomingMessage, player)
+                                val playerDetails = communicationManager.assignTheirUserNameAndRoom(incomingMessage, player)
                                 player = playerDetails.name
                                 room = playerDetails.roomName
+                                details = playerDetails
+                                println("\n$player is being assigned to $room")
                                 isPlayerSuccessfullyConnected = true
                             }
 
@@ -43,10 +46,13 @@ fun Route.socket(communicationManager: PlayerCommunicationManager){
             } catch(e: Exception) {
                 e.printStackTrace()
             } finally {
-                communicationManager.disconnectPlayer(player)
+                if (details != null) {
+                    communicationManager.disconnectPlayer(details!!)
+                }
             }
         }
     }
+
 }
 
 

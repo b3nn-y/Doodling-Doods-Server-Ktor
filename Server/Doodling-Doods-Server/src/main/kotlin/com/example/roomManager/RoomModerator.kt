@@ -1,8 +1,10 @@
+package com.example.roomManager
+
 import com.example.playerManager.Player
 import com.example.roomManager.Room
 import kotlinx.coroutines.*
 
-class RoomModerator {
+object RoomModerator {
     private var rooms = hashMapOf<String, Room>()
     private val roomJobs = mutableMapOf<String, Job>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -72,10 +74,14 @@ class RoomModerator {
         }
     }
 
+
     //this function adds a player to a room based on name
-//    fun addPlayerToRoom(name: String){
-//        rooms[name]?.players?.add(Player(name, "", ""))
-//    }
+    fun addPlayerToRoom(playerDetails: Player){
+        rooms[playerDetails.roomName]?.players?.add(playerDetails)
+    }
+    fun removePlayer(playerDetails: Player){
+        rooms[playerDetails.roomName]?.players?.remove(playerDetails)
+    }
 
 }
 

@@ -1,6 +1,7 @@
 package com.example.playerManager
 
 import com.example.roomManager.Room
+import com.example.roomManager.RoomModerator
 import com.google.gson.Gson
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
@@ -28,7 +29,7 @@ class PlayerCommunicationManager {
 
     }
 
-    fun assignTheirUserName(data: String, oldName:String): Player {
+    fun assignTheirUserNameAndRoom(data: String, oldName:String): Player {
         val playerDetails = Gson().fromJson(data, Player::class.java)
         tempPlayerSockets.forEach{ (name, socket) ->
             if (name == oldName){
@@ -36,6 +37,16 @@ class PlayerCommunicationManager {
                 tempPlayerSockets.remove(oldName)
             }
         }
+        playerDetails.session = playerSockets[playerDetails.name]
+        when(playerDetails.joinType){
+            "create" -> {
+                RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails) ))
+            }
+            "join" -> {
+                RoomModerator.addPlayerToRoom(playerDetails)
+            }
+        }
+
         return playerDetails
     }
 
@@ -60,8 +71,9 @@ class PlayerCommunicationManager {
         }
     }
 
-    fun disconnectPlayer(player: String) {
-        playerSockets.remove(player)
+    fun disconnectPlayer(player: Player) {
+        RoomModerator.removePlayer(player)
+        playerSockets.remove(player.name)
 //        state.update {
 //            it.copy(
 ////                connectedPlayers = it.connectedPlayers - 'p'
@@ -78,6 +90,7 @@ class PlayerCommunicationManager {
     fun checkIfTheInputIsOfPlayerDataType(data: String): Boolean {
         try {
             Gson().fromJson(data, Player::class.java)
+            println("Player data initialized")
             return true
         }
         catch (e:Exception){

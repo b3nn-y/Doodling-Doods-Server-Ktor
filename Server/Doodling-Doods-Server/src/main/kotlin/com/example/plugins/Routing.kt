@@ -6,6 +6,9 @@ import com.example.dao.RoomsDao
 import com.example.models.JsonRoomObject
 import com.example.playerManager.PlayerCommunicationManager
 import com.example.playerManager.socket
+import com.example.roomManager.RoomModerator
+import com.game.doodlingdoods.filesForServerCommunication.RoomAvailability
+import com.google.gson.Gson
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -62,6 +65,17 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
         }
 
+        post("/room") {
+            val fromParameters = call.receiveParameters()
+            val roomId = fromParameters.getOrFail("room_id")
+            val roomData = RoomModerator.getRoom(roomId)
+            if (roomData == null){
+                call.respond(Gson().toJson(RoomAvailability(false, "")))
+            }
+            else{
+                call.respond(Gson().toJson(RoomAvailability(true, roomData.pass)))
+            }
+        }
         get("/rooms") {
             val listOfRooms = dao.allRooms()
 
