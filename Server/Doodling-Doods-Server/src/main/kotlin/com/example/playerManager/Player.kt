@@ -1,7 +1,9 @@
 package com.example.playerManager
 
 import io.ktor.websocket.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Player(
     var name:String,
     var joinType:String,
@@ -10,5 +12,5 @@ data class Player(
     var score: Int = 0,
     var noOfGuessedAnswers: Int = 0,
     var guest: Boolean = true,
-    var session: WebSocketSession
+    var admin: Boolean = false
 )

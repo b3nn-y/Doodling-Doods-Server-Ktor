@@ -1,9 +1,13 @@
-import com.example.playerManager.Player
-import com.example.roomManager.Room
-import kotlinx.coroutines.*
+package com.example.roomManager
 
-class RoomModerator {
-    private var rooms = hashMapOf<String, Room>()
+import com.example.playerManager.Player
+import com.google.gson.Gson
+import io.ktor.websocket.*
+import kotlinx.coroutines.*
+import java.util.concurrent.ConcurrentHashMap
+
+object RoomModerator {
+    var rooms = hashMapOf<String, Room>()
     private val roomJobs = mutableMapOf<String, Job>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -72,10 +76,26 @@ class RoomModerator {
         }
     }
 
+
     //this function adds a player to a room based on name
-    fun addPlayerToRoom(name: String){
-        rooms[name]?.players?.add(Player(name, "", ""))
+    fun addPlayerToRoom(playerDetails: Player){
+        rooms[playerDetails.roomName]?.players?.add(playerDetails)
     }
+    fun removePlayer(playerDetails: Player){
+        rooms[playerDetails.roomName]?.players?.remove(playerDetails)
+    }
+
+    fun sendRoomUpdates(player: String, room: String, playerSockets: ConcurrentHashMap<String, WebSocketSession>){
+        val roomData = rooms[room]
+        roomData?.players?.forEach {
+            if (it.name != player){
+                CoroutineScope(Dispatchers.IO).launch {
+                    playerSockets[it.name]?.send(Gson().toJson(rooms[room]))
+                }
+            }
+        }
+    }
+
 
 }
 

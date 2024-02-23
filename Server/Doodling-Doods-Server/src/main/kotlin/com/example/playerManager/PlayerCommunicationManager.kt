@@ -1,41 +1,96 @@
 package com.example.playerManager
 
+import com.example.roomManager.Room
+import com.example.roomManager.RoomModerator
+import com.google.gson.Gson
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.concurrent.ConcurrentHashMap
 
-class TicTacToeGame {
+class PlayerCommunicationManager {
     private val playerSockets = ConcurrentHashMap<String, WebSocketSession>()
+    private val tempPlayerSockets = ConcurrentHashMap<String, WebSocketSession>()
 
-    private val state = MutableStateFlow(GameState())
+    private val state = MutableStateFlow("")
     private val gameScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var delayGameJob: Job? = null
+
+    private var noOfPlayersConnected = 0
 
     init {
         gameScope.launch {
             clientWelcomeMessage()
-            state.onEach(::broadcast)
         }
 
     }
 
-    fun connectPlayer(session: WebSocketSession, action: String): String? {
-        println("Connected")
-        return "Connected"
-    }
-
-
-    suspend fun broadcast(state: GameState) {
-        playerSockets.values.forEach { socket ->
-            socket.send(""+state)
+    fun assignTheirUserNameAndRoom(data: String, oldName:String): Player {
+        val playerDetails = Gson().fromJson(data, Player::class.java)
+        tempPlayerSockets.forEach{ (name, socket) ->
+            if (name == oldName){
+                playerSockets[playerDetails.name] = socket
+                tempPlayerSockets.remove(oldName)
+            }
         }
+//        playerDetails.session = playerSockets[playerDetails.name]
+        when(playerDetails.joinType){
+            "create" -> {
+                RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails) ))
+            }
+            "join" -> {
+                RoomModerator.addPlayerToRoom(playerDetails)
+            }
+        }
+
+
+//        var d = TRoom(
+//            name = roomData.name,
+//            pass = roomData.pass,
+//            players = roomData.players.toString(),
+//            noOfPlayersInRoom =  roomData.noOfPlayersInRoom,
+//            noOfGuessedAnswersInCurrentRound =  roomData.noOfGuessedAnswersInCurrentRound,
+//            createdBy = roomData.createdBy.toString(),
+//            maxPlayers = roomData.maxPlayers,
+//            cords = roomData.cords,
+//            visibility = roomData.visibility,
+//            currentPlayer = roomData.currentPlayer,
+//            rounds = roomData.rounds,
+//            currentWordToGuess = roomData.currentWordToGuess)
+//        println("Sent Room Data to Player ${playerDetails.name}")
+        CoroutineScope(Dispatchers.IO).launch {
+            playerSockets[playerDetails.name]?.send(Json.encodeToString(RoomModerator.getRoom(playerDetails.roomName)))
+        }
+
+        return playerDetails
     }
+
+//    fun encodeToStringWithMoshi(room: Room): String {
+//        val moshi = Moshi.Builder().build()
+//        val adapter = moshi.adapter(Room::class.java)
+//        return adapter.toJson(room)
+//    }
+
+    fun incomingClientRequestModerator(player: String, room: String, request: String){
+        println("Request by $player on room $room: $request")
+        if (checkIfTheInputIsOfRoomDataType(request)){
+            println("\nRequest $request")
+            RoomModerator.rooms[room] = Gson().fromJson(request, Room::class.java)
+            RoomModerator.sendRoomUpdates(player, room, playerSockets)
+        }
+
+    }
+
+    fun connectPlayer(session: WebSocketSession): String {
+        val tempPlayerName = "tempPlayer${noOfPlayersConnected++}"
+        println("Connected $tempPlayerName")
+        tempPlayerSockets[tempPlayerName] = session
+        return tempPlayerName
+    }
+
+
 
     private suspend fun clientWelcomeMessage() {
         playerSockets.values.forEach { socket ->
@@ -45,146 +100,46 @@ class TicTacToeGame {
         }
     }
 
-    fun disconnectPlayer(player: String) {
-        playerSockets.remove(player)
-        state.update {
-            it.copy(
-                connectedPlayers = it.connectedPlayers - 'p'
-            )
-        }
+    fun disconnectPlayer(player: Player) {
+        RoomModerator.removePlayer(player)
+        playerSockets.remove(player.name)
+//        state.update {
+//            it.copy(
+////                connectedPlayers = it.connectedPlayers - 'p'
+//            )
+//        }
     }
 
-
-}
-
-
-class TicTacToeGamee {
-
-    private val state = MutableStateFlow(GameState())
-
-    private val playerSockets = ConcurrentHashMap<Char, WebSocketSession>()
-
-    private val gameScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private var delayGameJob: Job? = null
-
-    init {
-        state.onEach(::broadcast).launchIn(gameScope)
-    }
-
-    fun connectPlayer(session: WebSocketSession): Char? {
-        val isPlayerX = state.value.connectedPlayers.any { it == 'X' }
-        val player = if (isPlayerX) 'O' else 'X'
-
-        state.update {
-            if (state.value.connectedPlayers.contains(player)) {
-                return null
-            }
-            if (!playerSockets.containsKey(player)) {
-                playerSockets[player] = session
-            }
-
-            it.copy(
-                connectedPlayers = it.connectedPlayers + player
-            )
-        }
-        return player
-    }
-
-    fun disconnectPlayer(player: Char) {
-        playerSockets.remove(player)
-        state.update {
-            it.copy(
-                connectedPlayers = it.connectedPlayers - player
-            )
-        }
-    }
-
-    suspend fun broadcast(state: GameState) {
+    suspend fun sendMessageToAllClients(message: String) {
         playerSockets.values.forEach { socket ->
-            socket.send(
-                ""
-            )
+            socket.send(message)
         }
     }
 
-
-    private fun getWinningPlayer(): Char? {
-        val field = state.value.field
-        return if (field[0][0] != null && field[0][0] == field[0][1] && field[0][1] == field[0][2]) {
-            field[0][0]
-        } else if (field[1][0] != null && field[1][0] == field[1][1] && field[1][1] == field[1][2]) {
-            field[1][0]
-        } else if (field[2][0] != null && field[2][0] == field[2][1] && field[2][1] == field[2][2]) {
-            field[2][0]
-        } else if (field[0][0] != null && field[0][0] == field[1][0] && field[1][0] == field[2][0]) {
-            field[0][0]
-        } else if (field[0][1] != null && field[0][1] == field[1][1] && field[1][1] == field[2][1]) {
-            field[0][1]
-        } else if (field[0][2] != null && field[0][2] == field[1][2] && field[1][2] == field[2][2]) {
-            field[0][2]
-        } else if (field[0][0] != null && field[0][0] == field[1][1] && field[1][1] == field[2][2]) {
-            field[0][0]
-        } else if (field[0][2] != null && field[0][2] == field[1][1] && field[1][1] == field[2][0]) {
-            field[0][2]
-        } else null
+    fun checkIfTheInputIsOfPlayerDataType(data: String): Boolean {
+        try {
+            Gson().fromJson(data, Player::class.java)
+            println("Player data initialized")
+            return true
+        }
+        catch (e:Exception){
+            println("\n\n\nPlayer Details InCorrect, Waiting for correct details")
+            return false
+        }
     }
 
-    private fun startNewRoundDelayed() {
-        delayGameJob?.cancel()
-        delayGameJob = gameScope.launch {
-            delay(5000L)
-            state.update {
-                it.copy(
-                    playerAtTurn = 'X',
-                    field = GameState.emptyField(),
-                    winningPlayer = null,
-                    isBoardFull = false,
-                )
+    fun checkIfTheInputIsOfRoomDataType(data: String): Boolean {
+        try {
+            var roomData = Gson().fromJson(data, Room::class.java)
+            if (roomData.name == null || roomData.pass == null || roomData.players != null || roomData.createdBy != null ){
+                return true
+            }
+            else{
+                return false
             }
         }
-    }
-
-}
-
-@Serializable
-data class GameState(
-    val playerAtTurn: Char? = 'X',
-    val field: Array<Array<Char?>> = emptyField(),
-    val winningPlayer: Char? = null,
-    val isBoardFull: Boolean = false,
-    val connectedPlayers: List<Char> = emptyList()
-) {
-    companion object {
-        fun emptyField(): Array<Array<Char?>> {
-            return arrayOf(
-                arrayOf(null, null, null),
-                arrayOf(null, null, null),
-                arrayOf(null, null, null),
-            )
+        catch (e:Exception){
+            return false
         }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as GameState
-
-        if (playerAtTurn != other.playerAtTurn) return false
-        if (!field.contentDeepEquals(other.field)) return false
-        if (winningPlayer != other.winningPlayer) return false
-        if (isBoardFull != other.isBoardFull) return false
-        if (connectedPlayers != other.connectedPlayers) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = playerAtTurn?.hashCode() ?: 0
-        result = 31 * result + field.contentDeepHashCode()
-        result = 31 * result + (winningPlayer?.hashCode() ?: 0)
-        result = 31 * result + isBoardFull.hashCode()
-        result = 31 * result + connectedPlayers.hashCode()
-        return result
     }
 }

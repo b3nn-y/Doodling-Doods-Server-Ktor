@@ -4,9 +4,11 @@ import com.example.DatabaseFactory
 import com.example.dao.RoomImpl
 import com.example.dao.RoomsDao
 import com.example.models.JsonRoomObject
-//import com.example.playerManager.PlayerCommunicationManager
-import com.example.playerManager.TicTacToeGame
+import com.example.playerManager.PlayerCommunicationManager
 import com.example.playerManager.socket
+import com.example.roomManager.RoomModerator
+import com.game.doodlingdoods.filesForServerCommunication.RoomAvailability
+import com.google.gson.Gson
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -19,7 +21,7 @@ import io.ktor.server.util.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 
-fun Application.configureRouting(communicationManager: TicTacToeGame) {
+fun Application.configureRouting(communicationManager: PlayerCommunicationManager) {
     install(StatusPages) {
         exception<Throwable> { call, cause ->
             call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
@@ -63,6 +65,17 @@ fun Application.configureRouting(communicationManager: TicTacToeGame) {
 
         }
 
+        post("/room") {
+            val fromParameters = call.receiveParameters()
+            val roomId = fromParameters.getOrFail("room_id")
+            val roomData = RoomModerator.getRoom(roomId)
+            if (roomData == null){
+                call.respond(Gson().toJson(RoomAvailability(false, "")))
+            }
+            else{
+                call.respond(Gson().toJson(RoomAvailability(true, roomData.pass)))
+            }
+        }
         get("/rooms") {
             val listOfRooms = dao.allRooms()
 

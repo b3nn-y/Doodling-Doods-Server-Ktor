@@ -63,5 +63,7 @@ dependencies {
     implementation ("org.postgresql:postgresql:$postgres_version")
     implementation ("com.zaxxer:HikariCP:$hikari_version")
 
+    implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
+    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 
 }
