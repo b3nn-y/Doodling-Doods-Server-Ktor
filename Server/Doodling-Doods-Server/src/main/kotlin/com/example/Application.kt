@@ -9,7 +9,7 @@ import io.ktor.server.application.*
 import io.ktor.server.netty.*
 
 fun main(args: Array<String>) {
-    RoomModerator.addRoom("TestRoom1", Room("TestRoom1","ben", arrayListOf(Player("","","","", session = null)),0,1,Player("","", "","", session = null),9,"0", false,Player("","", "","", session = null),8,""))
+    RoomModerator.addRoom("TestRoom1", Room("TestRoom1","ben", arrayListOf(Player("","","","")),0,1,Player("","", "",""),9,"0", false,Player("","", "","",),8,""))
 //    val roomCreator = com.example.roomManager.RoomModerator()
 //    roomCreator.addRoom("TestRoom1", Room("","", arrayListOf(Player("","","")),false))
 //    roomCreator.addRoom("TestRoom2", Room("","", arrayListOf(Player("","","")),false))

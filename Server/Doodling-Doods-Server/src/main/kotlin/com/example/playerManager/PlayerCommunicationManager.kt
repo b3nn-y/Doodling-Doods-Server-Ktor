@@ -6,10 +6,8 @@ import com.google.gson.Gson
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.util.concurrent.ConcurrentHashMap
 
 class PlayerCommunicationManager {
@@ -37,7 +35,7 @@ class PlayerCommunicationManager {
                 tempPlayerSockets.remove(oldName)
             }
         }
-        playerDetails.session = playerSockets[playerDetails.name]
+//        playerDetails.session = playerSockets[playerDetails.name]
         when(playerDetails.joinType){
             "create" -> {
                 RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails) ))
@@ -47,10 +45,41 @@ class PlayerCommunicationManager {
             }
         }
 
+
+//        var d = TRoom(
+//            name = roomData.name,
+//            pass = roomData.pass,
+//            players = roomData.players.toString(),
+//            noOfPlayersInRoom =  roomData.noOfPlayersInRoom,
+//            noOfGuessedAnswersInCurrentRound =  roomData.noOfGuessedAnswersInCurrentRound,
+//            createdBy = roomData.createdBy.toString(),
+//            maxPlayers = roomData.maxPlayers,
+//            cords = roomData.cords,
+//            visibility = roomData.visibility,
+//            currentPlayer = roomData.currentPlayer,
+//            rounds = roomData.rounds,
+//            currentWordToGuess = roomData.currentWordToGuess)
+//        println("Sent Room Data to Player ${playerDetails.name}")
+        CoroutineScope(Dispatchers.IO).launch {
+            playerSockets[playerDetails.name]?.send(Json.encodeToString(RoomModerator.getRoom(playerDetails.roomName)))
+        }
+
         return playerDetails
     }
 
+//    fun encodeToStringWithMoshi(room: Room): String {
+//        val moshi = Moshi.Builder().build()
+//        val adapter = moshi.adapter(Room::class.java)
+//        return adapter.toJson(room)
+//    }
+
     fun incomingClientRequestModerator(player: String, room: String, request: String){
+        println("Request by $player on room $room: $request")
+        if (checkIfTheInputIsOfRoomDataType(request)){
+            println("\nRequest $request")
+            RoomModerator.rooms[room] = Gson().fromJson(request, Room::class.java)
+            RoomModerator.sendRoomUpdates(player, room, playerSockets)
+        }
 
     }
 
@@ -95,6 +124,21 @@ class PlayerCommunicationManager {
         }
         catch (e:Exception){
             println("\n\n\nPlayer Details InCorrect, Waiting for correct details")
+            return false
+        }
+    }
+
+    fun checkIfTheInputIsOfRoomDataType(data: String): Boolean {
+        try {
+            var roomData = Gson().fromJson(data, Room::class.java)
+            if (roomData.name == null || roomData.pass == null || roomData.players != null || roomData.createdBy != null ){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        catch (e:Exception){
             return false
         }
     }
