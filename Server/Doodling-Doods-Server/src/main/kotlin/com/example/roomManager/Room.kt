@@ -3,6 +3,7 @@ package com.example.roomManager
 import com.example.playerManager.Player
 import kotlinx.serialization.Serializable
 
+//This is the room class, where all the game data is passed with
 @Serializable
 data class Room(
     var name:String,

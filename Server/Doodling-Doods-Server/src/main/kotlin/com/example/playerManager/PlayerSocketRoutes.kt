@@ -7,6 +7,8 @@ import kotlinx.coroutines.channels.consumeEach
 
 class PlayerSocketRoutes {
 }
+
+//This file contains, the websockets routes, by which the client connects.
 fun Route.socket(communicationManager: PlayerCommunicationManager){
     route("/connect"){
         webSocket {

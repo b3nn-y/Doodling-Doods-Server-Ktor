@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import java.util.concurrent.ConcurrentHashMap
-
+//This is a static object, This manages the entire room
 object RoomModerator {
     var rooms = hashMapOf<String, Room>()
     private val roomJobs = mutableMapOf<String, Job>()
@@ -83,10 +83,12 @@ object RoomModerator {
     fun addPlayerToRoom(playerDetails: Player){
         rooms[playerDetails.roomName]?.players?.add(playerDetails)
     }
+    //remove a player
     fun removePlayer(playerDetails: Player){
         rooms[playerDetails.roomName]?.players?.remove(playerDetails)
     }
 
+    //this function, sends all the clients when a user sends and updated room data
     fun sendRoomUpdates(player: String, room: String, playerSockets: ConcurrentHashMap<String, WebSocketSession>){
         val roomData = rooms[room]
         roomData?.players?.forEach {
@@ -102,6 +104,7 @@ object RoomModerator {
 
     }
 
+    //This function updates the room's data, that is being managed
     fun updateRoomData(roomName: String, data: Room){
         rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
         rooms[roomName]?.noOfGuessedAnswersInCurrentRound = data.noOfGuessedAnswersInCurrentRound

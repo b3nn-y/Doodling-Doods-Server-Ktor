@@ -10,23 +10,22 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.concurrent.ConcurrentHashMap
 
+//This class is responsible for all the incoming request from the clients, this evaluates the message and does appropriate actions
 class PlayerCommunicationManager {
+    //This file holds all the player socket sessions, we use these to communicate back the client
     private val playerSockets = ConcurrentHashMap<String, WebSocketSession>()
+    //This hasp map exists, because at first when a client sends a join request we assign a temp name to them and wait until they give us the proper details, until that this hash map contains their data.
     private val tempPlayerSockets = ConcurrentHashMap<String, WebSocketSession>()
 
-    private val state = MutableStateFlow("")
+//    private val state = MutableStateFlow("")
     private val gameScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private var delayGameJob: Job? = null
+//    private var delayGameJob: Job? = null
 
+    //this has all the players that have connected to the server so far
     private var noOfPlayersConnected = 0
 
-    init {
-        gameScope.launch {
-            clientWelcomeMessage()
-        }
 
-    }
-
+    //This functions assigns the proper username and other data, when the server receives proper input from the client
     fun assignTheirUserNameAndRoom(data: String, oldName:String): Player {
         val playerDetails = Gson().fromJson(data, Player::class.java)
         tempPlayerSockets.forEach{ (name, socket) ->
@@ -36,6 +35,8 @@ class PlayerCommunicationManager {
             }
         }
 //        playerDetails.session = playerSockets[playerDetails.name]
+
+        //this block creates or join them to a particular room, based on their join type
         when(playerDetails.joinType){
             "create" -> {
                 RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails) ))
@@ -45,21 +46,7 @@ class PlayerCommunicationManager {
             }
         }
 
-
-//        var d = TRoom(
-//            name = roomData.name,
-//            pass = roomData.pass,
-//            players = roomData.players.toString(),
-//            noOfPlayersInRoom =  roomData.noOfPlayersInRoom,
-//            noOfGuessedAnswersInCurrentRound =  roomData.noOfGuessedAnswersInCurrentRound,
-//            createdBy = roomData.createdBy.toString(),
-//            maxPlayers = roomData.maxPlayers,
-//            cords = roomData.cords,
-//            visibility = roomData.visibility,
-//            currentPlayer = roomData.currentPlayer,
-//            rounds = roomData.rounds,
-//            currentWordToGuess = roomData.currentWordToGuess)
-//        println("Sent Room Data to Player ${playerDetails.name}")
+        //This block sends back the client the current room data
         CoroutineScope(Dispatchers.IO).launch {
             playerSockets[playerDetails.name]?.send(Json.encodeToString(RoomModerator.getRoom(playerDetails.roomName)))
         }
@@ -73,6 +60,7 @@ class PlayerCommunicationManager {
 //        return adapter.toJson(room)
 //    }
 
+    //This function moderates all the incoming requests, and if its valid, it performs actions
     fun incomingClientRequestModerator(player: String, room: String, request: String){
         println("Request by $player on room $room: $request")
         if (checkIfTheInputIsOfRoomDataType(request)){
@@ -87,39 +75,40 @@ class PlayerCommunicationManager {
 
     }
 
+    //This functions connects the incoming client with a temp username and save their socket sessions
     fun connectPlayer(session: WebSocketSession): String {
         val tempPlayerName = "tempPlayer${noOfPlayersConnected++}"
         println("Connected $tempPlayerName")
         tempPlayerSockets[tempPlayerName] = session
+        gameScope.launch {
+            clientWelcomeMessage(session)
+        }
         return tempPlayerName
     }
 
 
+    //This function is executed when the client joins, with a welcome message
+    private suspend fun clientWelcomeMessage(session: WebSocketSession) {
+        session.send(
+            "You have been successfully connected to the Doodling Doods Server!!"
+        )
 
-    private suspend fun clientWelcomeMessage() {
-        playerSockets.values.forEach { socket ->
-            socket.send(
-                "You have been successfully connected to the Doodling Doods Server!!"
-            )
-        }
     }
 
+    //This function removes the player from the respective room and removes its socket session, when the player disconnects
     fun disconnectPlayer(player: Player) {
         RoomModerator.removePlayer(player)
         playerSockets.remove(player.name)
-//        state.update {
-//            it.copy(
-////                connectedPlayers = it.connectedPlayers - 'p'
-//            )
-//        }
     }
 
+    //This function can be used to send a message to all the connected players
     suspend fun sendMessageToAllClients(message: String) {
         playerSockets.values.forEach { socket ->
             socket.send(message)
         }
     }
 
+    //This function returns true, if the incoming data is of the type of Player data class.
     fun checkIfTheInputIsOfPlayerDataType(data: String): Boolean {
         try {
             Gson().fromJson(data, Player::class.java)
@@ -131,7 +120,7 @@ class PlayerCommunicationManager {
             return false
         }
     }
-
+    //This function returns true, if the incoming data is of the type of Room data class.
     fun checkIfTheInputIsOfRoomDataType(data: String): Boolean {
         try {
             var roomData = Gson().fromJson(data, Room::class.java)
