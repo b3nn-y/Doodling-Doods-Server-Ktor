@@ -1,7 +1,7 @@
 package com.example.playerManager
 
 //This file is going to be used to return a player according to the number of rounds. The usage can be seen in the TestLogic.kt file, below this
-class PlayerTurnModerator {
+open class PlayerTurnModerator {
 
     private var playersList = ArrayList<Player>()
     private var finishedPlayersList = ArrayList<Player>()
