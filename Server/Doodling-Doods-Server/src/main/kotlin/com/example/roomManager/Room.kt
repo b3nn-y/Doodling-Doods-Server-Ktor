@@ -16,11 +16,12 @@ data class Room(
     var visibility: Boolean = true,
     var currentPlayer: Player? = null,
     var rounds: Int = 3,
-    var currentWordToGuess:String? = null
+    var currentWordToGuess:String? = null,
+    var gameStarted:Boolean = false
 )
 
 @Serializable
-data class TRoom(
+data class TestRoom(
     var name:String,
     var pass:String,
     var players: String,

@@ -9,7 +9,9 @@ import java.util.concurrent.ConcurrentHashMap
 object RoomModerator {
     var rooms = hashMapOf<String, Room>()
     private val roomJobs = mutableMapOf<String, Job>()
+    private val ongoingGames = mutableMapOf<String, Job>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineSupervisorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     //adds a room to the room list
     fun addRoom(name: String, room: Room) {
@@ -95,6 +97,24 @@ object RoomModerator {
             }
         }
     }
+
+    fun startGame(room: String){
+
+    }
+
+    fun updateRoomData(roomName: String, data: Room){
+        rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+        rooms[roomName]?.noOfGuessedAnswersInCurrentRound = data.noOfGuessedAnswersInCurrentRound
+        rooms[roomName]?.maxPlayers = data.maxPlayers
+        rooms[roomName]?.cords = data.cords
+        rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+        rooms[roomName]?.visibility = data.visibility
+        rooms[roomName]?.rounds = data.rounds
+        rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
+        rooms[roomName]?.gameStarted = data.gameStarted
+
+    }
+
 
 
 }

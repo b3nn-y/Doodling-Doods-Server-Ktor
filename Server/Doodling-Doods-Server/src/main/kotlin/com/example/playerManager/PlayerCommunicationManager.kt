@@ -77,8 +77,12 @@ class PlayerCommunicationManager {
         println("Request by $player on room $room: $request")
         if (checkIfTheInputIsOfRoomDataType(request)){
             println("\nRequest $request")
-            RoomModerator.rooms[room] = Gson().fromJson(request, Room::class.java)
-            RoomModerator.sendRoomUpdates(player, room, playerSockets)
+//            RoomModerator.rooms[room] = Gson().fromJson(request, Room::class.java)
+            CoroutineScope(Dispatchers.Default).launch{
+                RoomModerator.updateRoomData(room, Gson().fromJson(request, Room::class.java))
+                RoomModerator.sendRoomUpdates(player, room, playerSockets)
+            }
+
         }
 
     }
@@ -131,7 +135,7 @@ class PlayerCommunicationManager {
     fun checkIfTheInputIsOfRoomDataType(data: String): Boolean {
         try {
             var roomData = Gson().fromJson(data, Room::class.java)
-            if (roomData.name == null || roomData.pass == null || roomData.players != null || roomData.createdBy != null ){
+            if (roomData.name != null && roomData.pass != null && roomData.players != null && roomData.createdBy != null && roomData.cords != null  ){
                 return true
             }
             else{
