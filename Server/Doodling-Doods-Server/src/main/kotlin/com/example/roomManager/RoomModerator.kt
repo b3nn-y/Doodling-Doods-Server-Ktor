@@ -15,6 +15,7 @@ object RoomModerator {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val coroutineSupervisorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    private var listOfOngoingGames = ArrayList<String>()
     //adds a room to the room list
     fun addRoom(name: String, room: Room) {
         rooms[name] = room
@@ -109,6 +110,7 @@ object RoomModerator {
     }
 
     fun startGame(room: String){
+        sendUpdatesToEveryoneInARoom(room)
         GuessTheWord().playGuessTheWord(room)
     }
 
@@ -121,10 +123,11 @@ object RoomModerator {
         rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
         rooms[roomName]?.visibility = data.visibility
         rooms[roomName]?.rounds = data.rounds
-        rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
+//        rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
         rooms[roomName]?.gameStarted = data.gameStarted
 
-        if(data.gameStarted){
+        if (!(roomName in listOfOngoingGames) && data.gameStarted ){
+            listOfOngoingGames.add(roomName)
             startGame(roomName)
         }
     }

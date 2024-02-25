@@ -65,6 +65,12 @@ object PlayerCommunicationManager {
         println("Request by $player on room $room: $request")
         if (checkIfTheInputIsOfRoomDataType(request)){
             println("\nRequest $request")
+            println("REQUEST VALIDATED!!!")
+            println("REQUEST VALIDATED!!!")
+            println("REQUEST VALIDATED!!!")
+            println("REQUEST VALIDATED!!!")
+            println("REQUEST VALIDATED!!!")
+            println("REQUEST VALIDATED!!!")
 //            RoomModerator.rooms[room] = Gson().fromJson(request, Room::class.java)
             CoroutineScope(Dispatchers.Default).launch{
                 RoomModerator.updateRoomData(room, Gson().fromJson(request, Room::class.java))
@@ -124,6 +130,11 @@ object PlayerCommunicationManager {
     fun checkIfTheInputIsOfRoomDataType(data: String): Boolean {
         try {
             var roomData = Gson().fromJson(data, Room::class.java)
+            println("name "+roomData.name != null)
+            println("pass "+roomData.pass != null)
+            println("players "+roomData.players != null)
+            println("created "+roomData.createdBy != null)
+            println("cords "+roomData.cords != null)
             if (roomData.name != null && roomData.pass != null && roomData.players != null && roomData.createdBy != null && roomData.cords != null  ){
                 return true
             }
@@ -132,6 +143,7 @@ object PlayerCommunicationManager {
             }
         }
         catch (e:Exception){
+            println(e.message)
             return false
         }
     }

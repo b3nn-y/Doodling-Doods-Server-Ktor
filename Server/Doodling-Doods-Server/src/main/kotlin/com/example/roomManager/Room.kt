@@ -2,6 +2,8 @@ package com.example.roomManager
 
 import com.example.playerManager.Player
 import kotlinx.serialization.Serializable
+import java.awt.Color
+import javax.sound.sampled.Line
 
 //This is the room class, where all the game data is passed with
 @Serializable
@@ -13,7 +15,7 @@ data class Room(
     var noOfGuessedAnswersInCurrentRound: Int = 0,
     var createdBy: Player,
     var maxPlayers: Int = 10,
-    var cords: String = "",
+    var cords:String  =  "",
     var visibility: Boolean = true,
     var currentPlayer: Player? = null,
     var rounds: Int = 3,
@@ -36,3 +38,9 @@ data class TestRoom(
     var rounds: Int = 3,
     var currentWordToGuess:String? = null
 )
+
+
+
+
+
+

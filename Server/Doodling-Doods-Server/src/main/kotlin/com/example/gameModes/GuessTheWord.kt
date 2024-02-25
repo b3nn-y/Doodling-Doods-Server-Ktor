@@ -33,12 +33,13 @@ class GuessTheWord : PlayerTurnModerator() {
                                 println(i.name)
                             }
                         }
-                        while (time < 3) {
+                        while (time < 10) {
                             time++
                             delay(1000)
-                            println(time)
+                            println("Timer "+time)
                         }
                         time = 0
+                        roomData?.cords = ""
                     }
 
                 } while (player != null)

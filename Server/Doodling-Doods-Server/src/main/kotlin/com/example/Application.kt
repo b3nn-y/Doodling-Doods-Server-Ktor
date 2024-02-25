@@ -13,7 +13,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 fun main(args: Array<String>) {
-    RoomModerator.addRoom("TestRoom1", Room("TestRoom1","ben", arrayListOf(Player("testBot","","","")),0,1,Player("","", "",""),9,"0", false,Player("","", "","",),8,""))
+    RoomModerator.addRoom("TestRoom1", Room("TestRoom1","ben", arrayListOf(Player("testBot","","","")),0,1,Player("","", "",""),9,
+        "", false,Player("","", "","",),8,""))
 //    val roomCreator = com.example.roomManager.RoomModerator()
 //    roomCreator.addRoom("TestRoom1", Room("","", arrayListOf(Player("","","")),false))
 //    roomCreator.addRoom("TestRoom2", Room("","", arrayListOf(Player("","","")),false))
