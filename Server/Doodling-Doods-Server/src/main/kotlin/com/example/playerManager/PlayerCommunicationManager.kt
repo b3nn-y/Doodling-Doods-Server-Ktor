@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
 import java.util.concurrent.ConcurrentHashMap
 
 //This class is responsible for all the incoming request from the clients, this evaluates the message and does appropriate actions
-class PlayerCommunicationManager {
+object PlayerCommunicationManager {
     //This file holds all the player socket sessions, we use these to communicate back the client
     private val playerSockets = ConcurrentHashMap<String, WebSocketSession>()
     //This hasp map exists, because at first when a client sends a join request we assign a temp name to them and wait until they give us the proper details, until that this hash map contains their data.
@@ -134,5 +134,9 @@ class PlayerCommunicationManager {
         catch (e:Exception){
             return false
         }
+    }
+
+    fun getPlayerSockets(): ConcurrentHashMap<String, WebSocketSession> {
+        return playerSockets
     }
 }

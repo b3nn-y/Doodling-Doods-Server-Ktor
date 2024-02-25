@@ -1,6 +1,8 @@
 package com.example.roomManager
 
+import com.example.gameModes.GuessTheWord
 import com.example.playerManager.Player
+import com.example.playerManager.PlayerCommunicationManager
 import com.google.gson.Gson
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
@@ -81,11 +83,17 @@ object RoomModerator {
 
     //this function adds a player to a room based on name
     fun addPlayerToRoom(playerDetails: Player){
-        rooms[playerDetails.roomName]?.players?.add(playerDetails)
+        coroutineScope.launch {
+            rooms[playerDetails.roomName]?.players?.add(playerDetails)
+            sendRoomUpdates(playerDetails.name, playerDetails.roomName, PlayerCommunicationManager.getPlayerSockets())
+        }
     }
     //remove a player
     fun removePlayer(playerDetails: Player){
-        rooms[playerDetails.roomName]?.players?.remove(playerDetails)
+        coroutineScope.launch {
+            rooms[playerDetails.roomName]?.players?.remove(playerDetails)
+            sendRoomUpdates(playerDetails.name, playerDetails.roomName, PlayerCommunicationManager.getPlayerSockets())
+        }
     }
 
     //this function, sends all the clients when a user sends and updated room data
@@ -101,7 +109,7 @@ object RoomModerator {
     }
 
     fun startGame(room: String){
-
+        GuessTheWord().playGuessTheWord(room)
     }
 
     //This function updates the room's data, that is being managed
@@ -116,6 +124,34 @@ object RoomModerator {
         rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
         rooms[roomName]?.gameStarted = data.gameStarted
 
+        if(data.gameStarted){
+            startGame(roomName)
+        }
+    }
+
+    fun updateRoomDataAndSend(roomName: String, data: Room){
+        coroutineScope.launch {
+            rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+            rooms[roomName]?.noOfGuessedAnswersInCurrentRound = data.noOfGuessedAnswersInCurrentRound
+            rooms[roomName]?.maxPlayers = data.maxPlayers
+            rooms[roomName]?.cords = data.cords
+            rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+            rooms[roomName]?.visibility = data.visibility
+            rooms[roomName]?.rounds = data.rounds
+            rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
+            rooms[roomName]?.gameStarted = data.gameStarted
+            sendUpdatesToEveryoneInARoom(roomName)
+        }
+
+    }
+
+    fun sendUpdatesToEveryoneInARoom(roomName: String){
+        coroutineScope.launch {
+            val playerSockets = PlayerCommunicationManager.getPlayerSockets()
+            rooms[roomName]?.players?.forEach{
+                playerSockets[it.name]?.send(Gson().toJson(rooms[roomName]))
+            }
+        }
     }
 
 

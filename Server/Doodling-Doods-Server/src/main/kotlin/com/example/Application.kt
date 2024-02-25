@@ -7,9 +7,13 @@ import com.example.roomManager.Room
 import com.example.roomManager.RoomModerator
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun main(args: Array<String>) {
-    RoomModerator.addRoom("TestRoom1", Room("TestRoom1","ben", arrayListOf(Player("","","","")),0,1,Player("","", "",""),9,"0", false,Player("","", "","",),8,""))
+    RoomModerator.addRoom("TestRoom1", Room("TestRoom1","ben", arrayListOf(Player("testBot","","","")),0,1,Player("","", "",""),9,"0", false,Player("","", "","",),8,""))
 //    val roomCreator = com.example.roomManager.RoomModerator()
 //    roomCreator.addRoom("TestRoom1", Room("","", arrayListOf(Player("","","")),false))
 //    roomCreator.addRoom("TestRoom2", Room("","", arrayListOf(Player("","","")),false))
@@ -20,6 +24,10 @@ fun main(args: Array<String>) {
 //        delay(4000)
 //        roomCreator.addRoom("TestRoom6", Room("","", arrayListOf(Player("","","")),false))
 //        roomCreator.addPlayerToRoom("TestRoom5")
+//    }
+//    CoroutineScope(Dispatchers.Default).launch {
+//        delay(10000)
+//        RoomModerator.startGame("TestRoom1")
 //    }
 
     try {
@@ -32,7 +40,7 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    val communicationManager = PlayerCommunicationManager()
+    val communicationManager = PlayerCommunicationManager
     configureSockets()
     configureSerialization()
     configureDatabases()

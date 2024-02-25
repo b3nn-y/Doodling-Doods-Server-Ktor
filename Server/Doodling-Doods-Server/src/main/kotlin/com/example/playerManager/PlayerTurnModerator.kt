@@ -6,13 +6,14 @@ open class PlayerTurnModerator {
     private var playersList = ArrayList<Player>()
     private var finishedPlayersList = ArrayList<Player>()
     private var numOfRounds = 0
-    fun getCurrentPlayer(): Player?{
+    fun getCurrentPlayer(): Player? {
+
         if (numOfRounds > 0){
             if (playersList.size > 0){
                 playersList.forEach {p1 ->
                     var isPlayersTurnOver = false
                     finishedPlayersList.forEach{ p2 ->
-                        if (p1 == p2){
+                        if (p1.name == p2.name){
                             isPlayersTurnOver = true
                         }
                     }
@@ -22,21 +23,11 @@ open class PlayerTurnModerator {
                     }
                 }
                 numOfRounds--
-                playersList = finishedPlayersList.shuffled() as ArrayList<Player>
+                playersList = finishedPlayersList
                 finishedPlayersList = arrayListOf()
-                getCurrentPlayer()
+                return null
             }
-//            else{
-//                if (finishedPlayersList.size > 0){
-//                    numOfRounds--
-//                    playersList = finishedPlayersList.shuffled() as ArrayList<Player>
-//                    finishedPlayersList = arrayListOf()
-//                    getCurrentPlayer()
-//                }
-//                else{
-//                    return null
-//                }
-//            }
+
         }
         else{
             return null
@@ -45,7 +36,7 @@ open class PlayerTurnModerator {
     }
 
     fun updatePlayerDetails(players: ArrayList<Player>){
-        playersList = players
+        playersList = players.shuffled() as ArrayList<Player>
     }
 
     fun noOfRounds(rounds: Int){
