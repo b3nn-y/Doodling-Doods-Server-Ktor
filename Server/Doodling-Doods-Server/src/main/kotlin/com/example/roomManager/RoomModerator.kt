@@ -1,16 +1,21 @@
 package com.example.roomManager
 
+import com.example.gameModes.GuessTheWord
 import com.example.playerManager.Player
+import com.example.playerManager.PlayerCommunicationManager
 import com.google.gson.Gson
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import java.util.concurrent.ConcurrentHashMap
-
+//This is a static object, This manages the entire room
 object RoomModerator {
     var rooms = hashMapOf<String, Room>()
     private val roomJobs = mutableMapOf<String, Job>()
+    private val ongoingGames = mutableMapOf<String, Job>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineSupervisorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    private var listOfOngoingGames = ArrayList<String>()
     //adds a room to the room list
     fun addRoom(name: String, room: Room) {
         rooms[name] = room
@@ -79,12 +84,20 @@ object RoomModerator {
 
     //this function adds a player to a room based on name
     fun addPlayerToRoom(playerDetails: Player){
-        rooms[playerDetails.roomName]?.players?.add(playerDetails)
+        coroutineScope.launch {
+            rooms[playerDetails.roomName]?.players?.add(playerDetails)
+            sendRoomUpdates(playerDetails.name, playerDetails.roomName, PlayerCommunicationManager.getPlayerSockets())
+        }
     }
+    //remove a player
     fun removePlayer(playerDetails: Player){
-        rooms[playerDetails.roomName]?.players?.remove(playerDetails)
+        coroutineScope.launch {
+            rooms[playerDetails.roomName]?.players?.remove(playerDetails)
+            sendRoomUpdates(playerDetails.name, playerDetails.roomName, PlayerCommunicationManager.getPlayerSockets())
+        }
     }
 
+    //this function, sends all the clients when a user sends and updated room data
     fun sendRoomUpdates(player: String, room: String, playerSockets: ConcurrentHashMap<String, WebSocketSession>){
         val roomData = rooms[room]
         roomData?.players?.forEach {
@@ -95,6 +108,55 @@ object RoomModerator {
             }
         }
     }
+
+    fun startGame(room: String){
+        sendUpdatesToEveryoneInARoom(room)
+        GuessTheWord().playGuessTheWord(room)
+    }
+
+    //This function updates the room's data, that is being managed
+    fun updateRoomData(roomName: String, data: Room){
+        rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+        rooms[roomName]?.noOfGuessedAnswersInCurrentRound = data.noOfGuessedAnswersInCurrentRound
+        rooms[roomName]?.maxPlayers = data.maxPlayers
+        rooms[roomName]?.cords = data.cords
+        rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+        rooms[roomName]?.visibility = data.visibility
+        rooms[roomName]?.rounds = data.rounds
+//        rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
+        rooms[roomName]?.gameStarted = data.gameStarted
+
+        if (!(roomName in listOfOngoingGames) && data.gameStarted ){
+            listOfOngoingGames.add(roomName)
+            startGame(roomName)
+        }
+    }
+
+    fun updateRoomDataAndSend(roomName: String, data: Room){
+        coroutineScope.launch {
+            rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+            rooms[roomName]?.noOfGuessedAnswersInCurrentRound = data.noOfGuessedAnswersInCurrentRound
+            rooms[roomName]?.maxPlayers = data.maxPlayers
+            rooms[roomName]?.cords = data.cords
+            rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
+            rooms[roomName]?.visibility = data.visibility
+            rooms[roomName]?.rounds = data.rounds
+            rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
+            rooms[roomName]?.gameStarted = data.gameStarted
+            sendUpdatesToEveryoneInARoom(roomName)
+        }
+
+    }
+
+    fun sendUpdatesToEveryoneInARoom(roomName: String){
+        coroutineScope.launch {
+            val playerSockets = PlayerCommunicationManager.getPlayerSockets()
+            rooms[roomName]?.players?.forEach{
+                playerSockets[it.name]?.send(Gson().toJson(rooms[roomName]))
+            }
+        }
+    }
+
 
 
 }

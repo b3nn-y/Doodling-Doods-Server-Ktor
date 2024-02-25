@@ -32,16 +32,7 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
     routing {
         socket(communicationManager)
     }
-    routing {
-        webSocket("/chat") {
-            send("You are connected!")
-            for(frame in incoming) {
-                frame as? Frame.Text ?: continue
-                val receivedText = frame.readText()
-                send("You said: $receivedText")
-            }
-        }
-    }
+
     routing {
         get("/") {
             call.respondText("Hello, Welcome to the Doodling Doods Server!!")
@@ -64,7 +55,7 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
             call.respond("Room added successfully")
 
         }
-
+        //This post method is being used by the client to check if a room exists with the name the user gives, and this returns back the details
         post("/room") {
             val fromParameters = call.receiveParameters()
             val roomId = fromParameters.getOrFail("room_id")
