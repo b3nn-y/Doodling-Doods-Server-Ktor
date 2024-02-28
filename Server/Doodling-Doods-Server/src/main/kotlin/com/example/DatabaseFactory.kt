@@ -3,6 +3,7 @@ package com.example
 
 
 import com.example.schemas.RoomsTable
+import com.example.schemas.UsersTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -20,12 +21,15 @@ object DatabaseFactory {
             SchemaUtils.create(RoomsTable)
 
         }
+        transaction {
+            SchemaUtils.create(UsersTable)
+        }
     }
 
     private fun hikari():HikariDataSource{
         val config = HikariConfig()
         config.driverClassName = "org.postgresql.Driver"
-        config.jdbcUrl = "jdbc:postgresql:ktorserver?user=benny-zstch1344&password=@1a2b3c4d@"
+        config.jdbcUrl = "jdbc:postgresql:ktorserver?user=postgres&password=@1a2b3c4d@"
         config.maximumPoolSize = 3
         config.isAutoCommit = false
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
