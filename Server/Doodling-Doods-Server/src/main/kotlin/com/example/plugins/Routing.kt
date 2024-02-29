@@ -99,8 +99,12 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
 
             val isSignUpSuccess =
+                if (usersDao.userInputFilter(user_name,mail_id)){
+                    usersDao.signUp(user_name, mail_id, password)
+                } else {
+                    false
+                }
 
-                usersDao.signUp(user_name, mail_id, password)
 
 
             call.respond(
@@ -135,9 +139,12 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
             val mail_id = fromParameters.getOrFail("mail_id")
             val password = fromParameters.getOrFail("password")
 
-            val user =
-                if (usersDao.userInputFilter(mail_id, password)) usersDao.signIn(mail_id, password)
-                else false
+
+
+            val user = usersDao.signIn(mail_id, password)
+
+
+            println("hash $user")
 
             if (user) call.respond(AuthenticationDataClass(true))
             else call.respond(AuthenticationDataClass(false))
@@ -147,5 +154,6 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
 
     }
+
 
 }

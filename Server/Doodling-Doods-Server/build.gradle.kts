@@ -66,6 +66,9 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
     implementation ("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
 
 
 }
