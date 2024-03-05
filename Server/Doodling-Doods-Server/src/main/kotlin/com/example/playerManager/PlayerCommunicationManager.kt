@@ -48,7 +48,7 @@ object PlayerCommunicationManager {
 
         //This block sends back the client the current room data
         CoroutineScope(Dispatchers.IO).launch {
-            playerSockets[playerDetails.name]?.send(Json.encodeToString(RoomModerator.getRoom(playerDetails.roomName)))
+            playerSockets[playerDetails.name]?.send(Gson().toJson(RoomModerator.getRoom(playerDetails.roomName)))
         }
 
         return playerDetails

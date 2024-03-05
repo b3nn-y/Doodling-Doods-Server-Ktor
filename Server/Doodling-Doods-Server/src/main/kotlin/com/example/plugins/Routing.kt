@@ -1,6 +1,9 @@
 package com.example.plugins
 
 import com.example.DatabaseFactory
+import com.example.leaderBoard.LeaderBoardDao
+import com.example.leaderBoard.LeaderBoardDataClass
+import com.example.leaderBoard.LeaderBoardImpl
 
 
 import com.example.roomsDao.RoomImpl
@@ -42,6 +45,7 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
     val roomsDao: RoomsDao = RoomImpl()
     val usersDao: UsersDao = UsersImpl()
+    val leaderBoardDao: LeaderBoardDao = LeaderBoardImpl()
 
     DatabaseFactory.init()
 
@@ -99,12 +103,19 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
 
             val isSignUpSuccess =
-                if (usersDao.userInputFilter(user_name,mail_id)){
+                if (usersDao.userInputFilter(user_name, mail_id)) {
+                    //creating row in leaderboard
+
                     usersDao.signUp(user_name, mail_id, password)
+
+
                 } else {
                     false
                 }
 
+            if (isSignUpSuccess)
+                leaderBoardDao.insertIntoLeaderBoard(user_name = user_name, 0, 0)
+//
 
 
             call.respond(
@@ -140,7 +151,6 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
             val password = fromParameters.getOrFail("password")
 
 
-
             val user = usersDao.signIn(mail_id, password)
 
 
@@ -148,6 +158,31 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
             if (user) call.respond(AuthenticationDataClass(true))
             else call.respond(AuthenticationDataClass(false))
+
+
+        }
+
+        get("/leaderboard") {
+            val leaderBoardScores = leaderBoardDao.getAllUsersFromLeaderBoard()
+
+            if (leaderBoardScores.isNotEmpty()) {
+
+                val scoreList = mutableListOf<LeaderBoardDataClass>()
+
+                leaderBoardScores.forEach {
+                    scoreList.add(
+                        LeaderBoardDataClass(
+                            id = it.id, user_name = it.user_name,
+                            matches_played = it.matches_played, trophies_count = it.trophies_count
+                        )
+                    )
+                }
+
+                call.respond(scoreList)
+
+            } else {
+                call.respond("Empty leaderBoard")
+            }
 
 
         }

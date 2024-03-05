@@ -1,7 +1,7 @@
 package com.example
 
 
-
+import com.example.schemas.LeaderBoardTable
 import com.example.schemas.RoomsTable
 import com.example.schemas.UsersTable
 import com.zaxxer.hikari.HikariConfig
@@ -24,9 +24,12 @@ object DatabaseFactory {
         transaction {
             SchemaUtils.create(UsersTable)
         }
+        transaction {
+            SchemaUtils.create(LeaderBoardTable)
+        }
     }
 
-    private fun hikari():HikariDataSource{
+    private fun hikari(): HikariDataSource {
         val config = HikariConfig()
         config.driverClassName = "org.postgresql.Driver"
         config.jdbcUrl = "jdbc:postgresql:ktorserver?user=postgres&password=@1a2b3c4d@"
