@@ -75,7 +75,9 @@ object RoomModerator {
             rooms.remove(name)
             roomJobs[name]?.cancel()
             roomJobs.remove(name)
+            listOfOngoingGames.remove(name)
             println("Room $name is destroyed")
+
         } catch (e: Exception) {
             println("No Room present")
         }
@@ -110,8 +112,11 @@ object RoomModerator {
     }
 
     fun startGame(room: String){
-        sendUpdatesToEveryoneInARoom(room)
-        GuessTheWord().playGuessTheWord(room)
+        coroutineScope.launch {
+            sendUpdatesToEveryoneInARoom(room)
+            GuessTheWord().playGuessTheWord(room)
+
+        }
     }
 
     //This function updates the room's data, that is being managed
@@ -123,8 +128,17 @@ object RoomModerator {
         rooms[roomName]?.noOfPlayersInRoom = data.noOfPlayersInRoom
         rooms[roomName]?.visibility = data.visibility
         rooms[roomName]?.rounds = data.rounds
-//        rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
+        rooms[roomName]?.guessedPlayers = data.guessedPlayers
+        rooms[roomName]?.wordList = data.wordList
+        rooms[roomName]?.rounds = data.rounds
+        rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
         rooms[roomName]?.gameStarted = data.gameStarted
+        rooms[roomName]?.messages = data.messages
+        rooms[roomName]?.numberOfRoundsOver = data.noOfGuessedAnswersInCurrentRound
+        rooms[roomName]?.gameOver = data.gameOver
+        rooms[roomName]?.iosCords = data.iosCords
+
+//        println("This is the data message ${data.messages}")
 
         if (!(roomName in listOfOngoingGames) && data.gameStarted ){
             listOfOngoingGames.add(roomName)
@@ -143,6 +157,12 @@ object RoomModerator {
             rooms[roomName]?.rounds = data.rounds
             rooms[roomName]?.currentWordToGuess = data.currentWordToGuess
             rooms[roomName]?.gameStarted = data.gameStarted
+            rooms[roomName]?.guessedPlayers = data.guessedPlayers
+            rooms[roomName]?.wordList = data.wordList
+            rooms[roomName]?.messages = data.messages
+            rooms[roomName]?.numberOfRoundsOver = data.noOfGuessedAnswersInCurrentRound
+            rooms[roomName]?.gameOver = data.gameOver
+            rooms[roomName]?.iosCords = data.iosCords
             sendUpdatesToEveryoneInARoom(roomName)
         }
 
@@ -153,6 +173,7 @@ object RoomModerator {
             val playerSockets = PlayerCommunicationManager.getPlayerSockets()
             rooms[roomName]?.players?.forEach{
                 playerSockets[it.name]?.send(Gson().toJson(rooms[roomName]))
+//                println("This is the message being sent"+ Gson().toJson(rooms[roomName]))
             }
         }
     }

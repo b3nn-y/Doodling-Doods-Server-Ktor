@@ -43,5 +43,12 @@ open class PlayerTurnModerator {
         numOfRounds = rounds
     }
 
+    fun getPlayerName(): ArrayList<String> {
+        var playerNames = ArrayList<String>()
+        playersList.forEach {
+            playerNames.add(it.name)
+        }
+        return playerNames
+    }
 
 }

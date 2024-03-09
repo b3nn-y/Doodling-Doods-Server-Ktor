@@ -20,7 +20,15 @@ data class Room(
     var currentPlayer: Player? = null,
     var rounds: Int = 3,
     var currentWordToGuess:String? = null,
-    var gameStarted:Boolean = false
+    var gameStarted:Boolean = false,
+    var gameMode:String = "Guess The Word",
+    var wordList: ArrayList<String>,
+    var guessedPlayers: ArrayList<String>,
+    var timer: Int = 0,
+    var messages: ArrayList<ChatMessages>,
+    var numberOfRoundsOver: Int = 0,
+    var gameOver:Boolean = false,
+    var iosCords: ArrayList<IosCords>
 )
 
 @Serializable
@@ -36,11 +44,41 @@ data class TestRoom(
     var visibility: Boolean = true,
     var currentPlayer: Player? = null,
     var rounds: Int = 3,
-    var currentWordToGuess:String? = null
+    var currentWordToGuess:String? = null,
+    var gameMode:String = "Guess The Word",
+    var wordList: ArrayList<String>,
+    var guessedPlayers: ArrayList<String>
+
 )
 
 
+@Serializable
+data class ChatMessages(
+    var player:String,
+    var msgID: String,
+    val msg: String,
+    val msgSize: Int = 1,
+    val msgColor: String,
+)
 
+@Serializable
+data class IosCords(
+    var points: ArrayList<Point>,
+    var color: RGB,
+    var lineWidth: Double
+)
 
+@Serializable
+data class Point(
+    var x: Double,
+    var y: Double
+)
+
+@Serializable
+data class RGB(
+    var red: Double,
+    var green: Double,
+    var blue: Double
+)
 
 

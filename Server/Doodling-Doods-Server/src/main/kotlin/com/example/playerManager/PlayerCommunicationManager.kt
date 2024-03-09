@@ -25,6 +25,7 @@ object PlayerCommunicationManager {
     private var noOfPlayersConnected = 0
 
 
+
     //This functions assigns the proper username and other data, when the server receives proper input from the client
     fun assignTheirUserNameAndRoom(data: String, oldName:String): Player {
         val playerDetails = Gson().fromJson(data, Player::class.java)
@@ -39,7 +40,7 @@ object PlayerCommunicationManager {
         //this block creates or join them to a particular room, based on their join type
         when(playerDetails.joinType){
             "create" -> {
-                RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails) ))
+                RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails), wordList = arrayListOf(), guessedPlayers = arrayListOf(), messages = arrayListOf() , iosCords = arrayListOf()))
             }
             "join" -> {
                 RoomModerator.addPlayerToRoom(playerDetails)
@@ -63,6 +64,7 @@ object PlayerCommunicationManager {
     //This function moderates all the incoming requests, and if its valid, it performs actions
     fun incomingClientRequestModerator(player: String, room: String, request: String){
         println("Request by $player on room $room: $request")
+
         if (checkIfTheInputIsOfRoomDataType(request)){
             println("\nRequest $request")
             println("REQUEST VALIDATED!!!")
