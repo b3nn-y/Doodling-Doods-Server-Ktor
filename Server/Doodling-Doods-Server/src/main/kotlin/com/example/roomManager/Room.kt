@@ -54,11 +54,13 @@ data class TestRoom(
 
 @Serializable
 data class ChatMessages(
-    var player:String,
+    var player: String,
     var msgID: String,
     val msg: String,
-    val msgSize: Int = 1,
+    var msgSize: Int = 1,
     val msgColor: String,
+    var visible: Boolean,
+    var lifeCycle:Boolean = true
 )
 
 @Serializable
