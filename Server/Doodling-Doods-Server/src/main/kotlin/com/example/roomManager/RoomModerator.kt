@@ -1,7 +1,9 @@
 package com.example.roomManager
 
 import com.example.gameModes.GuessTheWord
+import com.example.playerManager.Chat
 import com.example.playerManager.Player
+import com.example.playerManager.PlayerChats
 import com.example.playerManager.PlayerCommunicationManager
 import com.google.gson.Gson
 import io.ktor.websocket.*
@@ -15,10 +17,14 @@ object RoomModerator {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val coroutineSupervisorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    var chatHashMap = HashMap<String, PlayerChats>()
+
+
     private var listOfOngoingGames = ArrayList<String>()
     //adds a room to the room list
     fun addRoom(name: String, room: Room) {
         rooms[name] = room
+        chatHashMap[name] = PlayerChats(arrayListOf(),HashMap())
 //        println(rooms)
         println("Room Added")
         val job = createBackgroundJob(name)
@@ -63,6 +69,23 @@ object RoomModerator {
         }
     }
 
+    fun addChat(chat: Chat, room: String){
+        coroutineScope.launch {
+            chatHashMap[room]?.chats?.add(chat.chat)
+            sendChats(room)
+        }
+    }
+
+    fun sendChats( room: String){
+        coroutineScope.launch {
+            val playerSockets = PlayerCommunicationManager.getPlayerSockets()
+            rooms[room]?.players?.forEach{
+                playerSockets[it.name]?.send(Gson().toJson(chatHashMap[room]))
+//                println("This is the message being sent"+ Gson().toJson(rooms[roomName]))
+            }
+        }
+    }
+
     //this function gives all the hashmap of all active rooms
     fun getAllRooms(): HashMap<String, Room> {
         return rooms
@@ -76,6 +99,7 @@ object RoomModerator {
             roomJobs[name]?.cancel()
             roomJobs.remove(name)
             listOfOngoingGames.remove(name)
+            chatHashMap.remove(name)
             println("Room $name is destroyed")
 
         } catch (e: Exception) {

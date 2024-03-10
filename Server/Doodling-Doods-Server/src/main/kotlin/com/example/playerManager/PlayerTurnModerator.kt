@@ -5,6 +5,7 @@ open class PlayerTurnModerator {
 
     private var playersList = ArrayList<Player>()
     private var finishedPlayersList = ArrayList<Player>()
+    private var lastPlayer = Player("", "","", "")
     private var numOfRounds = 0
     fun getCurrentPlayer(): Player? {
 
@@ -17,8 +18,9 @@ open class PlayerTurnModerator {
                             isPlayersTurnOver = true
                         }
                     }
-                    if (!isPlayersTurnOver){
+                    if (!isPlayersTurnOver && p1 != lastPlayer){
                         finishedPlayersList.add(p1)
+                        lastPlayer = p1
                         return p1
                     }
                 }

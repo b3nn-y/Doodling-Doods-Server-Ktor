@@ -1,5 +1,6 @@
 package com.example.playerManager
 
+import com.example.roomManager.ChatMessages
 import com.example.roomManager.Room
 import com.example.roomManager.RoomModerator
 import com.google.gson.Gson
@@ -23,7 +24,6 @@ object PlayerCommunicationManager {
 
     //this has all the players that have connected to the server so far
     private var noOfPlayersConnected = 0
-
 
 
     //This functions assigns the proper username and other data, when the server receives proper input from the client
@@ -65,13 +65,16 @@ object PlayerCommunicationManager {
     fun incomingClientRequestModerator(player: String, room: String, request: String){
         println("Request by $player on room $room: $request")
 
+        if (checkIfTheInputIsOfChatDataType(request)){
+            println("\nChat Request $request")
+            println("Chat REQUEST VALIDATED!!!")
+            CoroutineScope(Dispatchers.Default).launch {
+                RoomModerator.addChat(Gson().fromJson(request, Chat::class.java), room)
+            }
+        }
+
         if (checkIfTheInputIsOfRoomDataType(request)){
             println("\nRequest $request")
-            println("REQUEST VALIDATED!!!")
-            println("REQUEST VALIDATED!!!")
-            println("REQUEST VALIDATED!!!")
-            println("REQUEST VALIDATED!!!")
-            println("REQUEST VALIDATED!!!")
             println("REQUEST VALIDATED!!!")
 //            RoomModerator.rooms[room] = Gson().fromJson(request, Room::class.java)
             CoroutineScope(Dispatchers.Default).launch{
@@ -132,12 +135,25 @@ object PlayerCommunicationManager {
     fun checkIfTheInputIsOfRoomDataType(data: String): Boolean {
         try {
             var roomData = Gson().fromJson(data, Room::class.java)
-            println("name "+roomData.name != null)
-            println("pass "+roomData.pass != null)
-            println("players "+roomData.players != null)
-            println("created "+roomData.createdBy != null)
-            println("cords "+roomData.cords != null)
+
             if (roomData.name != null && roomData.pass != null && roomData.players != null && roomData.createdBy != null && roomData.cords != null  ){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        catch (e:Exception){
+            println(e.message)
+            return false
+        }
+    }
+
+    fun checkIfTheInputIsOfChatDataType(data: String): Boolean{
+        try {
+            var chat = Gson().fromJson(data, Chat::class.java)
+
+            if ( chat.chat != null && chat.chat.msg is String && (chat.chat.msgColor in mutableListOf("green", "white", "black") && RoomModerator.getRoom(chat.chat.room) != null) ){
                 return true
             }
             else{

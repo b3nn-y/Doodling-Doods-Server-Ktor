@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3277937d-672b-4702-9377-39f80049bf9e" name="Changes" comment="" />
+    <list default="true" id="3277937d-672b-4702-9377-39f80049bf9e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/playerManager/PlayerChats.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/kotlin/main/com/example/roomManager/ChatMessages$$serializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/example/roomManager/ChatMessages$$serializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/kotlin/main/com/example/roomManager/ChatMessages.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/example/roomManager/ChatMessages.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/playerManager/PlayerCommunicationManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/playerManager/PlayerCommunicationManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/playerManager/PlayerTurnModerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/playerManager/PlayerTurnModerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/Room.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/Room.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/RoomModerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/RoomModerator.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,10 +48,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin Data Class" />
         <option value="Kotlin Object" />
         <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
+        <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
@@ -72,9 +82,9 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "chat-feature-ben",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/benny-zstch1344/Trade Show/Doodling-Doods-Server-Ktor-main/Server/Doodling-Doods-Server",
+    "last_opened_file_path": "/Users/benny-zstch1344/Trade Show/Doodling-Doods-Server-Ktor/Server/Doodling-Doods-Server",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.17",
     "project.structure.side.proportion": "0.0"
