@@ -82,7 +82,7 @@ class GuessTheWord : PlayerTurnModerator() {
                             }
                             RoomModerator.sendUpdatesToEveryoneInARoom(room)
 
-                            while (time < 15) {
+                            while (time < 65) {
                                 time++
                                 RoomModerator.getRoom(room)?.timer = time
                                 if (roomData != null) {

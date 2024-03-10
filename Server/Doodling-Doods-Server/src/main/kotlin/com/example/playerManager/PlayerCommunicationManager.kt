@@ -70,6 +70,7 @@ object PlayerCommunicationManager {
             println("Chat REQUEST VALIDATED!!!")
             CoroutineScope(Dispatchers.Default).launch {
                 RoomModerator.addChat(Gson().fromJson(request, Chat::class.java), room)
+                println(Gson().fromJson(request, Chat::class.java))
             }
         }
 
