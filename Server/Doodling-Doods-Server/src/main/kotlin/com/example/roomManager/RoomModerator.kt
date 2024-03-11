@@ -76,20 +76,34 @@ object RoomModerator {
         coroutineScope.launch {
             chatHashMap[room]?.chats?.add(chat.chat)
             var score = HashMap<String, Int>()
-            for (i in chatHashMap[room]?.chats?: arrayListOf()){
-                if (score.containsKey(i.player)){
-                    if (i.msgColor == "green"){
-                        score[i.player]?.plus(5)
+
+
+            for (i in RoomModerator.getRoom(room)?.players?: arrayListOf()){
+                for (j in chatHashMap[room]?.chats?: arrayListOf()){
+                    if (score.containsKey(i.name)){
+                        if (i.name == j.player){
+                            if (j.msgColor == "green"){
+                                score[j.player]?.plus(5)
+                            }
+                        }
                     }
-                }
-                else{
-                    score[i.player] = 0
-                    if (i.msgColor == "green"){
-                        score[i.player]?.plus(5)
+                    else{
+                        score[i.name] = 0
+                        if (i.name == j.player){
+                            if (j.msgColor == "green"){
+                                score[j.player]?.plus(5)
+                            }
+                        }
                     }
                 }
             }
+
             chatHashMap[room]?.score = score
+
+//            chatHashMap[room]?.score?.toList()
+//                ?.sortedByDescending { it.second }
+//                ?.toMap()
+
             sendChats(room)
         }
     }

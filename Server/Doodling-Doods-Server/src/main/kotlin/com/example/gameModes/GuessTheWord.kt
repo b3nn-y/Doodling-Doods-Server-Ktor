@@ -56,6 +56,7 @@ class GuessTheWord : PlayerTurnModerator() {
                             RoomModerator.getRoom(room)?.wordList = tempListOfWords
                             RoomModerator.getRoom(room)?.currentPlayer = player
                             RoomModerator.getRoom(room)?.isWordChosen = false
+                            RoomModerator.getRoom(room)?.numberOfRoundsOver = i-1
                         if (roomData != null) {
                             RoomModerator.sendUpdatesToEveryoneInARoom(room)
                         }
@@ -90,6 +91,7 @@ class GuessTheWord : PlayerTurnModerator() {
                             roomData = RoomModerator.getRoom(room)
                             roomData?.cords = ""
                             roomData?.iosCords= arrayListOf()
+                            RoomModerator.isWordChosen[room] = false
 //                        roomData?.currentWordToGuess = "loading"
                         if (roomData != null) {
                             RoomModerator.updateRoomDataAndSend(room, roomData)
