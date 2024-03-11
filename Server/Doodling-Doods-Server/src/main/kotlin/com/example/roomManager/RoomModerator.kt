@@ -19,6 +19,8 @@ object RoomModerator {
 
     var chatHashMap = HashMap<String, PlayerChats>()
 
+    var isWordChosen = HashMap<String, Boolean>()
+
 
     private var listOfOngoingGames = ArrayList<String>()
     //adds a room to the room list
@@ -27,6 +29,7 @@ object RoomModerator {
         chatHashMap[name] = PlayerChats(arrayListOf(),HashMap())
 //        println(rooms)
         println("Room Added")
+        isWordChosen[name] = false
         val job = createBackgroundJob(name)
         roomJobs[name] = job
 
@@ -72,6 +75,21 @@ object RoomModerator {
     fun addChat(chat: Chat, room: String){
         coroutineScope.launch {
             chatHashMap[room]?.chats?.add(chat.chat)
+            var score = HashMap<String, Int>()
+            for (i in chatHashMap[room]?.chats?: arrayListOf()){
+                if (score.containsKey(i.player)){
+                    if (i.msgColor == "green"){
+                        score[i.player]?.plus(5)
+                    }
+                }
+                else{
+                    score[i.player] = 0
+                    if (i.msgColor == "green"){
+                        score[i.player]?.plus(5)
+                    }
+                }
+            }
+            chatHashMap[room]?.score = score
             sendChats(room)
         }
     }
@@ -100,6 +118,7 @@ object RoomModerator {
             roomJobs.remove(name)
             listOfOngoingGames.remove(name)
             chatHashMap.remove(name)
+            isWordChosen.remove(name)
             println("Room $name is destroyed")
 
         } catch (e: Exception) {
@@ -161,7 +180,8 @@ object RoomModerator {
         rooms[roomName]?.numberOfRoundsOver = data.noOfGuessedAnswersInCurrentRound
         rooms[roomName]?.gameOver = data.gameOver
         rooms[roomName]?.iosCords = data.iosCords
-
+        rooms[roomName]?.isWordChosen = data.isWordChosen
+        isWordChosen[roomName] = data.isWordChosen
 //        println("This is the data message ${data.messages}")
 
         if (!(roomName in listOfOngoingGames) && data.gameStarted ){

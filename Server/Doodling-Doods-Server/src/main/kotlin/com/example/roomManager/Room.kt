@@ -28,7 +28,8 @@ data class Room(
     var messages: ArrayList<ChatMessages>,
     var numberOfRoundsOver: Int = 0,
     var gameOver:Boolean = false,
-    var iosCords: ArrayList<IosCords>
+    var iosCords: ArrayList<IosCords>,
+    var isWordChosen: Boolean = false
 )
 
 @Serializable

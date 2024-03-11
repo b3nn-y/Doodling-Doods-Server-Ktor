@@ -55,34 +55,24 @@ class GuessTheWord : PlayerTurnModerator() {
                             }
                             RoomModerator.getRoom(room)?.wordList = tempListOfWords
                             RoomModerator.getRoom(room)?.currentPlayer = player
-
+                            RoomModerator.getRoom(room)?.isWordChosen = false
                         if (roomData != null) {
-                            RoomModerator.updateRoomDataAndSend(room, roomData)
+                            RoomModerator.sendUpdatesToEveryoneInARoom(room)
                         }
-                            delay(1000)
 //                        var wordWaitingTime = 0
 //                        while (wordWaitingTime<5){
 //                            wordWaitingTime++
 //                            println("word123 "+RoomModerator.getRoom(room)?.currentWordToGuess)
 //                            delay(1000)
 //                        }
-                            var currentWord = tempListOfWords.random()
 
-                            println("word123 ${RoomModerator.getRoom(room)?.currentWordToGuess}")
-                            RoomModerator.getRoom(room)?.currentWordToGuess = currentWord
-                            if (roomData != null) {
-                                RoomModerator.updateRoomDataAndSend(room, roomData)
+                            while (RoomModerator.isWordChosen[room] == false){
+
                             }
-                            println(roomData)
-                            println("\n\n\n\ncurrent PLayer: ${RoomModerator.getRoom(room)?.currentPlayer?.name}\n\n\n\n")
-                            if (roomData != null) {
-                                for (i in roomData.players) {
-                                    println(i.name)
-                                }
-                            }
+
                             RoomModerator.sendUpdatesToEveryoneInARoom(room)
 
-                            while (time < 65) {
+                            while (time < 15) {
                                 time++
                                 RoomModerator.getRoom(room)?.timer = time
                                 if (roomData != null) {
@@ -118,7 +108,7 @@ class GuessTheWord : PlayerTurnModerator() {
             }
 
 
-            roomData = RoomModerator.getRoom(room)
+
 
         }
 //        RoomModerator.getRoom(room)?.gameStarted = false

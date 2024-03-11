@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import java.security.MessageDigest
 import okhttp3.internal.and
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class UsersImpl : UsersDao {
 
@@ -55,6 +56,26 @@ class UsersImpl : UsersDao {
 
             userByUsername != null || userByMailId != null
         }
+
+    override suspend fun getUser(mail_id: String):UsersDataClass?{
+        var userData: UsersDataClass? = null
+        transaction {
+            val result = UsersTable.select {
+                UsersTable.mail_id eq mail_id
+            }.singleOrNull()
+
+            result?.let {
+                userData = UsersDataClass(
+                    it[UsersTable.id],
+                    it[UsersTable.user_name],
+                    it[UsersTable.mail_id],
+                    it[UsersTable.password]
+
+                )
+            }
+        }
+        return userData
+    }
 
     // filter for sign up call
     override suspend fun userInputFilter(
