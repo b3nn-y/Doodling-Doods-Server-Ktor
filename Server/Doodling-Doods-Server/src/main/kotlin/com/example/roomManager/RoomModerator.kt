@@ -1,7 +1,9 @@
 package com.example.roomManager
 
 import com.example.gameModes.GuessTheWord
+import com.example.playerManager.Chat
 import com.example.playerManager.Player
+import com.example.playerManager.PlayerChats
 import com.example.playerManager.PlayerCommunicationManager
 import com.google.gson.Gson
 import io.ktor.websocket.*
@@ -15,12 +17,19 @@ object RoomModerator {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val coroutineSupervisorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    var chatHashMap = HashMap<String, PlayerChats>()
+
+    var isWordChosen = HashMap<String, Boolean>()
+
+
     private var listOfOngoingGames = ArrayList<String>()
     //adds a room to the room list
     fun addRoom(name: String, room: Room) {
         rooms[name] = room
+        chatHashMap[name] = PlayerChats(arrayListOf(),HashMap())
 //        println(rooms)
         println("Room Added")
+        isWordChosen[name] = false
         val job = createBackgroundJob(name)
         roomJobs[name] = job
 
@@ -63,6 +72,38 @@ object RoomModerator {
         }
     }
 
+    fun addChat(chat: Chat, room: String){
+        coroutineScope.launch {
+            chatHashMap[room]?.chats?.add(chat.chat)
+            var score = HashMap<String, Int>()
+            for (i in chatHashMap[room]?.chats?: arrayListOf()){
+                if (score.containsKey(i.player)){
+                    if (i.msgColor == "green"){
+                        score[i.player]?.plus(5)
+                    }
+                }
+                else{
+                    score[i.player] = 0
+                    if (i.msgColor == "green"){
+                        score[i.player]?.plus(5)
+                    }
+                }
+            }
+            chatHashMap[room]?.score = score
+            sendChats(room)
+        }
+    }
+
+    fun sendChats( room: String){
+        coroutineScope.launch {
+            val playerSockets = PlayerCommunicationManager.getPlayerSockets()
+            rooms[room]?.players?.forEach{
+                playerSockets[it.name]?.send(Gson().toJson(chatHashMap[room]))
+//                println("This is the message being sent"+ Gson().toJson(rooms[roomName]))
+            }
+        }
+    }
+
     //this function gives all the hashmap of all active rooms
     fun getAllRooms(): HashMap<String, Room> {
         return rooms
@@ -76,6 +117,8 @@ object RoomModerator {
             roomJobs[name]?.cancel()
             roomJobs.remove(name)
             listOfOngoingGames.remove(name)
+            chatHashMap.remove(name)
+            isWordChosen.remove(name)
             println("Room $name is destroyed")
 
         } catch (e: Exception) {
@@ -137,7 +180,8 @@ object RoomModerator {
         rooms[roomName]?.numberOfRoundsOver = data.noOfGuessedAnswersInCurrentRound
         rooms[roomName]?.gameOver = data.gameOver
         rooms[roomName]?.iosCords = data.iosCords
-
+        rooms[roomName]?.isWordChosen = data.isWordChosen
+        isWordChosen[roomName] = data.isWordChosen
 //        println("This is the data message ${data.messages}")
 
         if (!(roomName in listOfOngoingGames) && data.gameStarted ){

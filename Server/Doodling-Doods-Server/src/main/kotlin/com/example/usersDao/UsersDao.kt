@@ -11,4 +11,8 @@ interface UsersDao {
 //    suspend fun userInputFilter(mail_id: String,password: String):Boolean
 //    suspend fun hashPassword(password: String):String
 
+
+    suspend fun getUser(mail_id: String):UsersDataClass?
+
+
 }

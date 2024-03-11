@@ -28,7 +28,8 @@ data class Room(
     var messages: ArrayList<ChatMessages>,
     var numberOfRoundsOver: Int = 0,
     var gameOver:Boolean = false,
-    var iosCords: ArrayList<IosCords>
+    var iosCords: ArrayList<IosCords>,
+    var isWordChosen: Boolean = false
 )
 
 @Serializable
@@ -54,11 +55,13 @@ data class TestRoom(
 
 @Serializable
 data class ChatMessages(
-    var player:String,
+    var player: String,
+    var room:String,
     var msgID: String,
     val msg: String,
-    val msgSize: Int = 1,
     val msgColor: String,
+    var visible: Boolean,
+    var lifeCycle:Boolean = true
 )
 
 @Serializable

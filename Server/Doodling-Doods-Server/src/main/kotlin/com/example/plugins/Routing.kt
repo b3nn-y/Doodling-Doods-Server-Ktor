@@ -14,6 +14,7 @@ import com.example.playerManager.socket
 import com.example.roomManager.RoomModerator
 import com.example.roomsDao.RoomAvailabilityDataClass
 import com.example.usersDao.AuthenticationDataClass
+import com.example.usersDao.JsonUser
 import com.example.usersDao.UsersDao
 import com.example.usersDao.UsersImpl
 import io.ktor.http.*
@@ -187,8 +188,24 @@ fun Application.configureRouting(communicationManager: PlayerCommunicationManage
 
         }
 
+        post("/user"){
+            val fromParameters = call.receiveParameters()
+            val mail_id = fromParameters.getOrFail("mail_id")
+
+            val user = usersDao.getUser(mail_id = mail_id)
+
+            if (user!=null) {
+                call.respond(JsonUser(id =user.id, mailId_by = mail_id, user_name = user.user_name))
+            }else{
+                call.respond("No user found")
+            }
+        }
+
 
     }
 
 
-}
+    }
+
+
+
