@@ -13,5 +13,6 @@ data class Player(
     var score: Int = 0,
     var noOfGuessedAnswers: Int = 0,
     var guest: Boolean = true,
-    var admin: Boolean = false
+    var admin: Boolean = false,
+    var profile:Int = 0
 )

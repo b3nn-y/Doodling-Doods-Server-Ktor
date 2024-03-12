@@ -1,5 +1,6 @@
 package com.example.gameModes
 
+import com.example.playerManager.Player
 import com.example.playerManager.PlayerTurnModerator
 import com.example.roomManager.Room
 import com.example.roomManager.RoomModerator
@@ -72,7 +73,7 @@ class GuessTheWord : PlayerTurnModerator() {
 
                             RoomModerator.sendUpdatesToEveryoneInARoom(room)
 
-                            while (time < 15) {
+                            while (time < 20) {
                                 time++
                                 RoomModerator.getRoom(room)?.timer = time
                                 if (roomData != null) {
@@ -90,6 +91,7 @@ class GuessTheWord : PlayerTurnModerator() {
                             roomData = RoomModerator.getRoom(room)
                             roomData?.cords = ""
                             roomData?.iosCords= arrayListOf()
+                            roomData?.currentPlayer = Player("Player", "", "", "")
 //                        roomData?.currentWordToGuess = "loading"
                         if (roomData != null) {
                             RoomModerator.updateRoomDataAndSend(room, roomData)
@@ -98,7 +100,7 @@ class GuessTheWord : PlayerTurnModerator() {
 
                     } while (player != null)
                     println("Round $i over\n")
-                    RoomModerator.getRoom(room)?.numberOfRoundsOver = i-1
+
                     RoomModerator.sendUpdatesToEveryoneInARoom(room)
                 }
                 else{
