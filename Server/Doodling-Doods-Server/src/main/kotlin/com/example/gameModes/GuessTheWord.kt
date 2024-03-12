@@ -1,6 +1,5 @@
 package com.example.gameModes
 
-import com.example.playerManager.Player
 import com.example.playerManager.PlayerTurnModerator
 import com.example.roomManager.Room
 import com.example.roomManager.RoomModerator
@@ -57,9 +56,10 @@ class GuessTheWord : PlayerTurnModerator() {
                             RoomModerator.getRoom(room)?.wordList = tempListOfWords
                             RoomModerator.getRoom(room)?.currentPlayer = player
                             RoomModerator.getRoom(room)?.isWordChosen = false
-                        if (roomData != null) {
-                            RoomModerator.sendUpdatesToEveryoneInARoom(room)
-                        }
+                            RoomModerator.getRoom(room)?.numberOfRoundsOver = i-1
+                            if (roomData != null) {
+                                RoomModerator.sendUpdatesToEveryoneInARoom(room)
+                            }
 //                        var wordWaitingTime = 0
 //                        while (wordWaitingTime<5){
 //                            wordWaitingTime++
@@ -73,7 +73,7 @@ class GuessTheWord : PlayerTurnModerator() {
 
                             RoomModerator.sendUpdatesToEveryoneInARoom(room)
 
-                            while (time < 20) {
+                            while (time < 15) {
                                 time++
                                 RoomModerator.getRoom(room)?.timer = time
                                 if (roomData != null) {
@@ -91,16 +91,16 @@ class GuessTheWord : PlayerTurnModerator() {
                             roomData = RoomModerator.getRoom(room)
                             roomData?.cords = ""
                             roomData?.iosCords= arrayListOf()
-                            roomData?.currentPlayer = Player("Player", "", "", "")
+                            RoomModerator.isWordChosen[room] = false
 //                        roomData?.currentWordToGuess = "loading"
-                        if (roomData != null) {
-                            RoomModerator.updateRoomDataAndSend(room, roomData)
-                        }
+                            if (roomData != null) {
+                                RoomModerator.updateRoomDataAndSend(room, roomData)
+                            }
                         }
 
                     } while (player != null)
                     println("Round $i over\n")
-
+                    RoomModerator.getRoom(room)?.numberOfRoundsOver = i-1
                     RoomModerator.sendUpdatesToEveryoneInARoom(room)
                 }
                 else{
