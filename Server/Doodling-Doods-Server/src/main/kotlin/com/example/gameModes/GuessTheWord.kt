@@ -1,7 +1,6 @@
 package com.example.gameModes
 
 import com.example.playerManager.PlayerTurnModerator
-import com.example.roomManager.Room
 import com.example.roomManager.RoomModerator
 import kotlinx.coroutines.*
 
@@ -14,7 +13,7 @@ class GuessTheWord : PlayerTurnModerator() {
 
     var noOfRoundsOver = 1
 
-    val words = listOf(
+    val words = arrayListOf(
         "horse", "door", "song",
         "trip", "backbone", "bomb",
         "round", "treasure", "garbage",
@@ -142,78 +141,95 @@ class GuessTheWord : PlayerTurnModerator() {
         "Scientist", "Researcher", "Pilot", "Flight Attendant", "Athlete", "Chef", "Travel Agent")
 
     private val gameScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private var time = 0
+    private var time = 10
     fun playGuessTheWord(room: String) {
         gameScope.launch {
             var roomData = RoomModerator.getRoom(room)
-            noOfRounds(4)
+            noOfRounds(3)
             for (i in 1..4) {
-                RoomModerator.getRoom(room)?.let { updatePlayerDetails(it.players) }
+                try {
+                    RoomModerator.getRoom(room)?.let { updatePlayerDetails(it.players) }
 
-                if (i!=4){
-                    do {
-                        val player = getCurrentPlayer()
-                        println("Current player in $room is ${player?.name}")
-                        if (player != null) {
-                            val tempListOfWords = ArrayList<String>()
-                            for (i in 1..3){
-                                var randomWord = tempListOfWords.add(words.random())
-                            }
-                            RoomModerator.getRoom(room)?.wordList = tempListOfWords
-                            RoomModerator.getRoom(room)?.currentPlayer = player
-                            RoomModerator.getRoom(room)?.isWordChosen = false
-                            RoomModerator.getRoom(room)?.numberOfRoundsOver = noOfRoundsOver
-                            if (roomData != null) {
-                                RoomModerator.sendUpdatesToEveryoneInARoom(room)
-                            }
+                    if (i!=4){
+                        try {
+                            do {
+                                val player = getCurrentPlayer()
+                                println("Current player in $room is ${player?.name}")
+                                if (player != null) {
+                                    val tempListOfWords = ArrayList<String>()
+                                    for (i in 1..3){
+                                        var randomWord = tempListOfWords.add(words.random())
+                                    }
+                                    RoomModerator.getRoom(room)?.wordList = tempListOfWords
+                                    RoomModerator.getRoom(room)?.currentPlayer = player
+                                    delay(300)
+                                    RoomModerator.getRoom(room)?.isWordChosen = false
+                                    RoomModerator.getRoom(room)?.numberOfRoundsOver = noOfRoundsOver
+                                    if (roomData != null) {
+                                        RoomModerator.sendUpdatesToEveryoneInARoom(room)
+                                    }
 //                        var wordWaitingTime = 0
 //                        while (wordWaitingTime<5){
 //                            wordWaitingTime++
 //                            println("word123 "+RoomModerator.getRoom(room)?.currentWordToGuess)
 //                            delay(1000)
 //                        }
+                                    RoomModerator.checkIfAWordIsSent(room, tempListOfWords)
+                                    while (RoomModerator.isWordChosen[room] == false){
 
-                            while (RoomModerator.isWordChosen[room] == false){
+                                    }
+                                    chosenWords.add(RoomModerator.getRoom(room)?.currentWordToGuess?:"")
+                                    words.remove(RoomModerator.getRoom(room)?.currentWordToGuess)
 
-                            }
-                            chosenWords.add(RoomModerator.getRoom(room)?.currentWordToGuess?:"")
-
-                            RoomModerator.sendUpdatesToEveryoneInARoom(room)
-
-                            while (time < 30) {
-                                time++
-                                RoomModerator.getRoom(room)?.timer = time
-                                if (roomData != null) {
                                     RoomModerator.sendUpdatesToEveryoneInARoom(room)
-                                }
-                                delay(1000)
-                                println("Timer "+time)
-                                if (getPlayerName().size == RoomModerator.getRoom(room)?.guessedPlayers?.size){
-                                    if (getPlayerName() == RoomModerator.getRoom(room)?.guessedPlayers){
-                                        break
+
+                                    while (time > 0) {
+                                        try {
+                                            time--
+                                            RoomModerator.getRoom(room)?.timer = time
+                                            if (roomData != null) {
+                                                RoomModerator.sendUpdatesToEveryoneInARoom(room)
+                                            }
+                                            delay(1000)
+                                            println("Timer "+time)
+                                            if (getPlayerName().size == RoomModerator.getRoom(room)?.guessedPlayers?.size){
+                                                if (getPlayerName() == RoomModerator.getRoom(room)?.guessedPlayers){
+                                                    break
+                                                }
+                                            }
+                                        }
+                                        catch (e:Exception){
+                                            println(e.message)
+                                        }
+                                    }
+                                    time = 10
+                                    roomData = RoomModerator.getRoom(room)
+                                    roomData?.cords = ""
+                                    roomData?.iosCords= arrayListOf()
+                                    RoomModerator.isWordChosen[room] = false
+//                        roomData?.currentWordToGuess = "loading"
+                                    if (roomData != null) {
+                                        RoomModerator.updateRoomDataAndSend(room, roomData)
                                     }
                                 }
-                            }
-                            time = 0
-                            roomData = RoomModerator.getRoom(room)
-                            roomData?.cords = ""
-                            roomData?.iosCords= arrayListOf()
-                            RoomModerator.isWordChosen[room] = false
-//                        roomData?.currentWordToGuess = "loading"
-                            if (roomData != null) {
-                                RoomModerator.updateRoomDataAndSend(room, roomData)
-                            }
-                        }
 
-                    } while (player != null)
-                    println("Round $i over\n")
-                    noOfRoundsOver++
-                    RoomModerator.getRoom(room)?.numberOfRoundsOver = noOfRoundsOver
-                    RoomModerator.sendUpdatesToEveryoneInARoom(room)
+                            } while (player != null)
+                        }
+                        catch (e:Exception){
+                            println(e.message)
+                        }
+                        println("Round $i over\n")
+                        noOfRoundsOver++
+                        RoomModerator.getRoom(room)?.numberOfRoundsOver = noOfRoundsOver
+                        RoomModerator.sendUpdatesToEveryoneInARoom(room)
+                    }
+                    else{
+                        RoomModerator.getRoom(room)?.gameOver = true
+                        RoomModerator.sendUpdatesToEveryoneInARoom(roomName = room)
+                    }
                 }
-                else{
-                    RoomModerator.getRoom(room)?.gameOver = true
-                    RoomModerator.sendUpdatesToEveryoneInARoom(roomName = room)
+                catch (e:Exception){
+                    println(e.message)
                 }
             }
 

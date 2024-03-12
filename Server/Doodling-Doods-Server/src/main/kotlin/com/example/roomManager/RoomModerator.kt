@@ -14,7 +14,7 @@ object RoomModerator {
     var rooms = hashMapOf<String, Room>()
     private val roomJobs = mutableMapOf<String, Job>()
     private val ongoingGames = mutableMapOf<String, Job>()
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private val coroutineSupervisorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     var chatHashMap = HashMap<String, PlayerChats>()
@@ -229,9 +229,25 @@ object RoomModerator {
         coroutineScope.launch {
             val playerSockets = PlayerCommunicationManager.getPlayerSockets()
             rooms[roomName]?.players?.forEach{
-                playerSockets[it.name]?.send(Gson().toJson(rooms[roomName]))
+                try {
+                    playerSockets[it.name]?.send(Gson().toJson(rooms[roomName]))
+                }
+                catch (e:Exception){
+                    println(e.message)
+                }
 //                println("This is the message being sent"+ Gson().toJson(rooms[roomName]))
             }
+        }
+    }
+    fun checkIfAWordIsSent(room: String, tempListOfWords: ArrayList<String>){
+        coroutineScope.launch {
+            delay(6000)
+            if (isWordChosen[room] != true){
+                RoomModerator.getRoom(room)?.currentWordToGuess = tempListOfWords.random()
+                isWordChosen[room] = true
+
+            }
+
         }
     }
 
