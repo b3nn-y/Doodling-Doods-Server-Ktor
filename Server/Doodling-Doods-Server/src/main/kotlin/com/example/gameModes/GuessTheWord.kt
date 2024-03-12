@@ -12,7 +12,113 @@ class GuessTheWord : PlayerTurnModerator() {
 
     var chosenWords = arrayListOf<String>()
 
-    var noOfRoundsOver = 0
+    var noOfRoundsOver = 1
+
+    val words = listOf(
+        "horse", "door", "song",
+        "trip", "backbone", "bomb",
+        "round", "treasure", "garbage",
+        "park", "pirate", "ski",
+        "state", "whistle", "palace",
+        "baseball", "coal", "queen",
+        "dominoes", "photograph", "computer",
+        "hockey", "aircraft", "hot dog",
+        "salt", "pepper", "key", "iPad",
+        "whisk", "frog", "lawnmower",
+        "mattress", "pinwheel", "cake",
+        "circus", "battery", "mailman",
+        "cowboy", "password", "bicycle",
+        "skate", "electricity", "lightsaber",
+        "thief", "teapot", "deep",
+        "spring", "nature", "shallow",
+        "toast", "outside", "America",
+        "roller blading", "gingerbread man", "bowtie",
+        "half", "spare", "wax",
+        "light bulb", "platypus", "music",
+        "cat", "sun", "cup",
+        "ghost", "flower", "pie",
+        "cow", "banana", "snowflake",
+        "bug", "book", "jar",
+        "snake", "light", "tree",
+        "lips", "apple", "slide",
+        "socks", "smile", "swing",
+        "coat", "shoe", "water",
+        "heart", "hat", "ocean",
+        "kite", "dog", "mouth",
+        "milk", "duck", "eyes",
+        "skateboard", "bird", "boy",
+        "apple", "person", "girl",
+        "mouse", "ball", "house",
+        "star", "nose", "bed",
+        "whale", "jacket", "shirt",
+        "hippo", "beach", "egg",
+        "face", "cookie", "cheese",
+        "ice cream cone", "drum", "circle",
+        "spoon", "worm", "spider web",
+        "bridge", "bone", "grapes",
+        "bell", "jellyfish", "bunny",
+        "truck", "grass", "door",
+        "monkey", "spider", "bread",
+        "ears", "bowl", "bracelet",
+        "alligator", "bat", "clock",
+        "lollipop", "moon", "doll",
+        "orange", "ear", "basketball",
+        "bike", "airplane", "pen",
+        "inchworm", "seashell", "rocket",
+        "cloud", "bear", "corn",
+        "chicken", "purse", "glasses",
+        "blocks", "carrot", "turtle",
+        "pencil", "horse", "dinosaur",
+        "head", "lamp", "snowman",
+        "ant", "giraffe", "cupcake",
+        "chair", "leaf", "bunk bed",
+        "snail", "baby", "balloon",
+        "bus", "cherry", "crab",
+        "football", "branch", "robot",
+        "sailboat", "popsicle", "brain",
+        "birthday cake", "skirt", "knee",
+        "pineapple", "tusk", "sprinkler",
+        "money", "spool", "lighthouse",
+        "doormat", "face", "flute",
+        "rug", "snowball", "purse",
+        "owl", "gate", "suitcase",
+        "stomach", "doghouse",
+        "bathroom scale", "peach", "newspaper",
+        "watering can", "hook", "school",
+        "beaver", "french fries", "beehive",
+        "beach", "artist", "flagpole",
+        "camera", "hair dryer", "mushroom",
+        "toe", "pretzel", "TV",
+        "quilt", "chalk", "dollar",
+        "soda", "chin", "swing",
+        "garden", "ticket", "boot",
+        "cello", "rain", "clam",
+        "pelican", "stingray", "fur",
+        "blowfish", "rainbow", "happy",
+        "fist", "base", "storm",
+        "mitten", "easel", "nail",
+        "sheep", "stoplight", "coconut",
+        "crib", "hippopotamus", "ring",
+        "seesaw", "plate", "fishing pole",
+        "hopscotch", "bell pepper", "front porch",
+        "cheek", "video camera", "washing machine",
+        "telephone", "silverware", "barn",
+        "snowflake", "bib", "flashlight",
+        "popsicle", "muffin", "sunflower",
+        "skirt", "top hat", "swimming pool",
+        "tusk", "radish", "peanut",
+        "spool", "poodle", "potato",
+        "face", "shark", "fang",
+        "snowball", "waist", "spoon",
+        "gate", "bottle", "mail",
+        "sheep", "lobster", "ice",
+        "crib", "lawn mower", "bubble",
+        "seesaw", "pencil", "cheeseburger",
+        "hopscotch", "rocking chair", "corner",
+        "cheek", "polly", "popcorn",
+        "telephone", "yo-yo", "seahorse",
+        "snowflake", "spine", "desk"
+    )
 
     val zohoProducts = arrayListOf("Creator", "Mail", "Sheet", "Show", "Cliq", "Connect", "Learn", "People", "Recruit", "Writer", "Sign", "Bigin", "Assist", "SalesIq", "Survey", "BackStage", "Payroll", "Project", "DataPrep", "Meeting", "Inventory", "Analytics", "Sprints", "Flow", "Desk", "Campaigns", "Forms", "Survey", "Sites", "PageSense", "Expense", "Checkout", "Work Drive", "Tables", "Catalyst", "Vault", "Site24x7")
 
@@ -51,12 +157,12 @@ class GuessTheWord : PlayerTurnModerator() {
                         if (player != null) {
                             val tempListOfWords = ArrayList<String>()
                             for (i in 1..3){
-                                tempListOfWords.add(zohoProducts.random())
+                                var randomWord = tempListOfWords.add(words.random())
                             }
                             RoomModerator.getRoom(room)?.wordList = tempListOfWords
                             RoomModerator.getRoom(room)?.currentPlayer = player
                             RoomModerator.getRoom(room)?.isWordChosen = false
-                            RoomModerator.getRoom(room)?.numberOfRoundsOver = i-1
+                            RoomModerator.getRoom(room)?.numberOfRoundsOver = noOfRoundsOver
                             if (roomData != null) {
                                 RoomModerator.sendUpdatesToEveryoneInARoom(room)
                             }
@@ -70,10 +176,11 @@ class GuessTheWord : PlayerTurnModerator() {
                             while (RoomModerator.isWordChosen[room] == false){
 
                             }
+                            chosenWords.add(RoomModerator.getRoom(room)?.currentWordToGuess?:"")
 
                             RoomModerator.sendUpdatesToEveryoneInARoom(room)
 
-                            while (time < 15) {
+                            while (time < 30) {
                                 time++
                                 RoomModerator.getRoom(room)?.timer = time
                                 if (roomData != null) {
@@ -100,7 +207,8 @@ class GuessTheWord : PlayerTurnModerator() {
 
                     } while (player != null)
                     println("Round $i over\n")
-                    RoomModerator.getRoom(room)?.numberOfRoundsOver = i-1
+                    noOfRoundsOver++
+                    RoomModerator.getRoom(room)?.numberOfRoundsOver = noOfRoundsOver
                     RoomModerator.sendUpdatesToEveryoneInARoom(room)
                 }
                 else{
