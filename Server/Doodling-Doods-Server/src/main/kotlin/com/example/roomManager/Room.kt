@@ -60,7 +60,8 @@ data class ChatMessages(
     val msg: String,
     val msgColor: String,
     var visible: Boolean,
-    var lifeCycle:Boolean = true
+    var lifeCycle:Boolean = true,
+    var chat:String = ""
 )
 
 @Serializable

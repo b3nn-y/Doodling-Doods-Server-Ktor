@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3277937d-672b-4702-9377-39f80049bf9e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/Application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/Application.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/DatabaseFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/DatabaseFactory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/gameModes/GuessTheWord.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/gameModes/GuessTheWord.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/playerManager/PlayerCommunicationManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/playerManager/PlayerCommunicationManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/Room.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/Room.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/RoomModerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/roomManager/RoomModerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
-    </list>
+    <list default="true" id="3277937d-672b-4702-9377-39f80049bf9e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,9 +75,10 @@
     "git-widget-placeholder": "avatar",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/benny-zstch1344/Trade Show/Doodling-Doods-Server-Ktor/Server/Doodling-Doods-Server",
-    "project.structure.last.edited": "Project",
+    "project.structure.last.edited": "SDK Location",
     "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.0"
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">

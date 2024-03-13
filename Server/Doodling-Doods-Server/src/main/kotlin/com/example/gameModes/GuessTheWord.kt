@@ -141,7 +141,7 @@ class GuessTheWord : PlayerTurnModerator() {
         "Scientist", "Researcher", "Pilot", "Flight Attendant", "Athlete", "Chef", "Travel Agent")
 
     private val gameScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private var time = 10
+    private var time = 30
     fun playGuessTheWord(room: String) {
         gameScope.launch {
             var roomData = RoomModerator.getRoom(room)
@@ -213,8 +213,17 @@ class GuessTheWord : PlayerTurnModerator() {
                                         catch (e:Exception){
                                             println(e.message)
                                         }
+                                        try {
+                                            var roundsOver = RoomModerator.checkIfAllPlayersHaveGuessed(RoomModerator.getRoom(room)?.currentWordToGuess!!, room)
+                                            if (roundsOver){
+                                                break
+                                            }
+                                        }
+                                        catch (e:Exception){
+
+                                        }
                                     }
-                                    time = 10
+                                    time = 30
                                     roomData = RoomModerator.getRoom(room)
                                     roomData?.cords = ""
                                     roomData?.iosCords= arrayListOf()

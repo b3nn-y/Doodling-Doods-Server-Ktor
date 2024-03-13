@@ -266,6 +266,21 @@ object RoomModerator {
         }
     }
 
+    fun checkIfAllPlayersHaveGuessed(word: String, room:String): Boolean {
+        var count = 0
+        chatHashMap[room]?.chats?.forEach {
+            if (it.chat == word.lowercase().trim()){
+                count++
+            }
+        }
+
+        println("Count$count, players ${getRoom(room)?.players?.size?.minus(1)}")
+        if (count == ((getRoom(room)?.players?.size)?.minus(1))){
+            return true
+        }
+        return false
+    }
+
 
 
 }
