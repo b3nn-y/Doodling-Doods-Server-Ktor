@@ -1,4 +1,3 @@
-
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -9,6 +8,11 @@ plugins {
     kotlin("jvm") version "1.9.22"
     id("io.ktor.plugin") version "2.3.8"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("java")
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+
+
 }
 
 group = "com.example"
@@ -21,11 +25,24 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+val sshAntTask = configurations.create("sshAntTask")
 repositories {
     mavenCentral()
 }
 
 dependencies {
+
+    implementation(group = "org.http4k", name = "http4k-core", version = "4.20.2.0")
+    implementation(group = "org.http4k", name = "http4k-server-jetty", version = "4.20.2.0")
+    implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.3.2")
+    implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.3.2")
+    implementation(group = "org.slf4j", name = "slf4j-api", version = "2.0.0-alpha5")
+    runtimeOnly(group = "org.slf4j", name = "slf4j-simple", version = "2.0.0-alpha5")
+    implementation(group = "org.postgresql", name = "postgresql", version = "42.+")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
+    testImplementation(kotlin("test"))
+
+
 
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-websockets-jvm")
@@ -70,9 +87,86 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    testImplementation ("junit:junit:4.13.2")
 
 
-
-
+    sshAntTask("org.apache.ant:ant-jsch:1.10.12")
 
 }
+
+
+tasks {
+    shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(sourceSets["test"].output)
+        archiveBaseName.set("my-app")
+        mergeServiceFiles()
+        manifest {
+            attributes("Main-Class" to "com.example.doodling-doods-server")
+        }
+    }
+}
+
+
+
+//ant.withGroovyBuilder {
+//    "taskdef"(
+//        "name" to "scp",
+//        "classname" to "org.apache.tools.ant.taskdefs.optional.ssh.Scp",
+//        "classpath" to configurations.get("sshAntTask").asPath
+//    )
+//    "taskdef"(
+//        "name" to "ssh",
+//        "classname" to "org.apache.tools.ant.taskdefs.optional.ssh.SSHExec",
+//        "classpath" to configurations.get("sshAntTask").asPath
+//    )
+//}
+//
+//task("deploy") {
+//    dependsOn("clean", "shadowJar")
+//    ant.withGroovyBuilder {
+//        doLast {
+//            val knownHosts = File.createTempFile("knownhosts", "txt")
+//            val user = "root"
+//            val host = "10.51.25.233"
+//            val key = file("keys/ttictactoe")
+//            val jarFileName = "com.plcoding.tictactoe-all.jar"
+//            try {
+//                "scp"(
+//                    "file" to file("build/libs/$jarFileName"),
+//                    "todir" to "$user@$host:/root/tictactoe",
+//                    "keyfile" to key,
+//                    "trust" to true,
+//                    "knownhosts" to knownHosts
+//                )
+//                "ssh"(
+//                    "host" to host,
+//                    "username" to user,
+//                    "keyfile" to key,
+//                    "trust" to true,
+//                    "knownhosts" to knownHosts,
+//                    "command" to "mv /root/tictactoe/$jarFileName /root/tictactoe/tictactoe.jar"
+//                )
+//                "ssh"(
+//                    "host" to host,
+//                    "username" to user,
+//                    "keyfile" to key,
+//                    "trust" to true,
+//                    "knownhosts" to knownHosts,
+//                    "command" to "systemctl stop tictactoe"
+//                )
+//                "ssh"(
+//                    "host" to host,
+//                    "username" to user,
+//                    "keyfile" to key,
+//                    "trust" to true,
+//                    "knownhosts" to knownHosts,
+//                    "command" to "systemctl start tictactoe"
+//                )
+//            } finally {
+//                knownHosts.delete()
+//            }
+//        }
+//    }
+//}

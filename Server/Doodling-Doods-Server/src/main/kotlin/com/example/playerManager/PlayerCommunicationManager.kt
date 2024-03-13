@@ -40,7 +40,7 @@ object PlayerCommunicationManager {
         //this block creates or join them to a particular room, based on their join type
         when(playerDetails.joinType){
             "create" -> {
-                RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails), wordList = arrayListOf(), guessedPlayers = arrayListOf(), messages = arrayListOf() , iosCords = arrayListOf()))
+                RoomModerator.addRoom(playerDetails.roomName, Room(name = playerDetails.name, pass = playerDetails.roomPass, createdBy = playerDetails, players = arrayListOf(playerDetails), wordList = arrayListOf(), guessedPlayers = arrayListOf(), messages = arrayListOf() , iosCords = arrayListOf(), wordType = "ZohoProducts"))
             }
             "join" -> {
                 RoomModerator.addPlayerToRoom(playerDetails)

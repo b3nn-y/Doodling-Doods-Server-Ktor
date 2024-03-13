@@ -19,6 +19,8 @@ object RoomModerator {
 
     var chatHashMap = HashMap<String, PlayerChats>()
 
+    var roomWordType = HashMap<String, String>()
+
     var isWordChosen = HashMap<String, Boolean>()
 
 
@@ -195,11 +197,23 @@ object RoomModerator {
         rooms[roomName]?.iosCords = data.iosCords
         rooms[roomName]?.isWordChosen = data.isWordChosen
         isWordChosen[roomName] = data.isWordChosen
+
+        rooms[roomName]?.wordType = data.wordType
+
+
+
+
 //        println("This is the data message ${data.messages}")
 
         if (!(roomName in listOfOngoingGames) && data.gameStarted ){
             listOfOngoingGames.add(roomName)
             startGame(roomName)
+            if (data.wordType== "ZohoProducts"){
+                roomWordType[roomName] = "ZohoProducts"
+            }
+            else{
+                roomWordType[roomName] = "Everyday Objects"
+            }
         }
     }
 
@@ -220,6 +234,7 @@ object RoomModerator {
             rooms[roomName]?.numberOfRoundsOver = data.noOfGuessedAnswersInCurrentRound
             rooms[roomName]?.gameOver = data.gameOver
             rooms[roomName]?.iosCords = data.iosCords
+
             sendUpdatesToEveryoneInARoom(roomName)
         }
 

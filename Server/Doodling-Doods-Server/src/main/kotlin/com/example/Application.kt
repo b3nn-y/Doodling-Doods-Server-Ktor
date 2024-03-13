@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 fun main(args: Array<String>) {
     RoomModerator.addRoom("TestRoom1", Room("TestRoom1","ben", arrayListOf(Player("testBot","","","")),0,1,Player("","", "",""),9,
-        "", false,Player("","", "","",),8,"", wordList = arrayListOf(), guessedPlayers = arrayListOf(), messages = arrayListOf(), iosCords = arrayListOf()))
+        "", false,Player("","", "","",),8,"", wordList = arrayListOf(), guessedPlayers = arrayListOf(), messages = arrayListOf(), iosCords = arrayListOf(), wordType = "ZohoProducts"))
 //    val roomCreator = com.example.roomManager.RoomModerator()
 //    roomCreator.addRoom("TestRoom1", Room("","", arrayListOf(Player("","","")),false))
 //    roomCreator.addRoom("TestRoom2", Room("","", arrayListOf(Player("","","")),false))

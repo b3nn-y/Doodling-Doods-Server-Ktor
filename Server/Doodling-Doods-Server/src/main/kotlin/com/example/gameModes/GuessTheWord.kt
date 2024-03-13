@@ -145,6 +145,8 @@ class GuessTheWord : PlayerTurnModerator() {
     fun playGuessTheWord(room: String) {
         gameScope.launch {
             var roomData = RoomModerator.getRoom(room)
+
+            println("wordType## ${roomData?.wordType.toString()}")
             noOfRounds(3)
             for (i in 1..4) {
                 try {
@@ -158,7 +160,12 @@ class GuessTheWord : PlayerTurnModerator() {
                                 if (player != null) {
                                     val tempListOfWords = ArrayList<String>()
                                     for (i in 1..3){
-                                        var randomWord = tempListOfWords.add(words.random())
+                                        if (RoomModerator.roomWordType[room] == "ZohoProducts"){
+                                            tempListOfWords.add(zohoProducts.random())
+                                        }else{
+                                            tempListOfWords.add(words.random())
+                                        }
+
                                     }
                                     RoomModerator.getRoom(room)?.wordList = tempListOfWords
                                     RoomModerator.getRoom(room)?.currentPlayer = player
@@ -179,7 +186,12 @@ class GuessTheWord : PlayerTurnModerator() {
 
                                     }
                                     chosenWords.add(RoomModerator.getRoom(room)?.currentWordToGuess?:"")
-                                    words.remove(RoomModerator.getRoom(room)?.currentWordToGuess)
+                                    if (roomData?.wordType=="ZohoProducts"){
+                                        zohoProducts.remove(RoomModerator.getRoom(room)?.currentWordToGuess)
+
+                                    }else{
+                                        words.remove(RoomModerator.getRoom(room)?.currentWordToGuess)
+                                    }
 
                                     RoomModerator.sendUpdatesToEveryoneInARoom(room)
 
